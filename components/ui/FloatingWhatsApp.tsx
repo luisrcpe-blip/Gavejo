@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { trackEvent } from "@/lib/analytics-store";
@@ -19,7 +19,7 @@ export function FloatingWhatsApp({ sourcePage }: FloatingWhatsAppProps) {
   const href = useMemo(() => {
     const clean = phone.replace(/\D/g, "");
     return `https://wa.me/${clean}?text=${encodeURIComponent(
-      "Hola Gavejo, quiero información para mi proyecto."
+      "Hola Gavejo, quiero informacion para mi proyecto."
     )}`;
   }, [phone]);
 

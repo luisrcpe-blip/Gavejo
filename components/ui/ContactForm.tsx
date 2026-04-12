@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { trackEvent } from "@/lib/analytics-store";
 import { addLead } from "@/lib/leads-store";
 import { getDemoSettings, subscribeSettings, syncSettingsFromServer } from "@/lib/settings-store";
-import { trackEvent } from "@/lib/analytics-store";
 
 type ContactFormProps = {
   originLanding: string;
@@ -63,7 +63,7 @@ export function ContactForm({ originLanding }: ContactFormProps) {
   };
 
   const waHref = `https://wa.me/${settings.whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(
-    "Hola Gavejo, quiero una propuesta técnica para mi proyecto."
+    "Hola Gavejo, quiero una propuesta tecnica para mi proyecto."
   )}`;
 
   return (
@@ -73,26 +73,26 @@ export function ContactForm({ originLanding }: ContactFormProps) {
           className="input-field"
           placeholder="Nombre y apellidos"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(event) => setName(event.target.value)}
         />
         <input
           className="input-field"
-          placeholder="Email o teléfono"
+          placeholder="Email o telefono"
           value={contact}
-          onChange={(e) => setContact(e.target.value)}
+          onChange={(event) => setContact(event.target.value)}
         />
         <textarea
           className="input-field textarea"
-          placeholder="Cuéntanos brevemente tu proyecto"
+          placeholder="Cuentanos brevemente tu proyecto"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(event) => setMessage(event.target.value)}
         />
         <label className="consent-row">
-          <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
+          <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
           <span>
-            Acepto el tratamiento de datos según la{" "}
+            Acepto el tratamiento de datos segun la{" "}
             <a href={settings.privacyUrl} target="_blank" rel="noreferrer">
-              política de privacidad
+              politica de privacidad
             </a>
             .
           </span>
@@ -108,7 +108,7 @@ export function ContactForm({ originLanding }: ContactFormProps) {
       </div>
       {status === "ok" && (
         <p className="form-feedback ok">
-          Lead registrado en CRM demo. Notificación EmailJS/Mailchimp queda preparada según ajustes.
+          Lead registrado en CRM. Integraciones EmailJS y Mailchimp quedan preparadas segun ajustes.
         </p>
       )}
       {status === "error" && (

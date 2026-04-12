@@ -1,10 +1,10 @@
-"use client";
+﻿"use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ContactForm } from "@/components/ui/ContactForm";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
+import { NeonPlaceholder } from "@/components/ui/NeonPlaceholder";
 import { PublicHeader } from "@/components/ui/PublicHeader";
 import { Reveal } from "@/components/ui/Reveal";
 import { trackEvent } from "@/lib/analytics-store";
@@ -38,10 +38,10 @@ export function LandingPage({ config }: LandingPageProps) {
 
   const heroTitle = override.heroTitle || config.heroTitle;
   const heroDescription = override.heroDescription || config.heroDescription;
-  const heroImage = override.heroImage || config.heroImage;
-  const heroCta = override.ctaPrimaryLabel || "Solicitar información";
+  const heroAssetRef = override.heroImage || config.heroImage;
+  const heroCta = override.ctaPrimaryLabel || "Solicitar informacion";
   const heroWhatsappHref = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(
-    "Hola Gavejo, quiero más información."
+    "Hola Gavejo, quiero mas informacion tecnica para mi proyecto."
   )}`;
   const isLandingActive = useMemo(() => override.active, [override.active]);
 
@@ -53,8 +53,8 @@ export function LandingPage({ config }: LandingPageProps) {
           <span className="chip">Landing temporalmente inactiva</span>
           <h1>{config.navName}</h1>
           <p className="lead-text">
-            Esta landing se encuentra en actualización desde panel admin. Puedes contactar por WhatsApp o volver
-            al inicio.
+            Esta landing esta en actualizacion desde el panel admin. Puedes volver al inicio o contactar
+            por WhatsApp.
           </p>
           <div className="hero-actions">
             <Link href="/" className="btn btn-primary">
@@ -75,10 +75,8 @@ export function LandingPage({ config }: LandingPageProps) {
       <PublicHeader />
 
       <main>
-        <section className="hero">
-          <Image className="hero-media" src={heroImage} alt={heroTitle} fill priority sizes="100vw" />
-          <div className="hero-overlay" />
-          <div className="container hero-content">
+        <section className="hero hero-architectural">
+          <div className="container hero-content hero-content-grid">
             <Reveal>
               <span className="chip chip-light">{config.heroBadge}</span>
               <h1>{heroTitle}</h1>
@@ -104,13 +102,17 @@ export function LandingPage({ config }: LandingPageProps) {
                 </a>
               </div>
             </Reveal>
+
+            <Reveal delay={120}>
+              <NeonPlaceholder label="Visual hero" caption={`Referencia actual: ${heroAssetRef}`} minHeight={340} />
+            </Reveal>
           </div>
         </section>
 
         <section id="intro" className="section container">
           <div className="two-col">
             <Reveal>
-              <p className="section-kicker">Introducción</p>
+              <p className="section-kicker">Introduccion</p>
               <h2>{config.introTitle}</h2>
             </Reveal>
             <Reveal delay={80}>
@@ -123,21 +125,14 @@ export function LandingPage({ config }: LandingPageProps) {
           <div className="container">
             <Reveal>
               <p className="section-kicker">Aplicaciones</p>
-              <h2>Dónde encaja esta solución</h2>
+              <h2>Escenarios de uso para arquitectura y contract</h2>
             </Reveal>
             <div className="grid grid-4">
               {config.applications.map((item, index) => (
                 <Reveal key={item.title} delay={index * 80}>
-                  <article className="card">
-                    <Image
-                      className="ratio-1x1"
-                      src={item.image}
-                      alt={item.alt}
-                      width={900}
-                      height={900}
-                      sizes="(max-width: 640px) 100vw, (max-width: 1080px) 50vw, 25vw"
-                    />
-                    <div className="card-body">
+                  <article className="card card-pad">
+                    <NeonPlaceholder label={item.title} caption={item.image} minHeight={220} />
+                    <div className="card-body" style={{ paddingInline: 0, paddingBottom: 0 }}>
                       <h3>{item.title}</h3>
                       <p>{item.text}</p>
                     </div>
@@ -151,22 +146,15 @@ export function LandingPage({ config }: LandingPageProps) {
         <section id="systems" className="section container">
           <Reveal>
             <p className="section-kicker">Sistemas</p>
-            <h2>Desarrollo técnico con lenguaje arquitectónico</h2>
+            <h2>Metodologia tecnica y operativa</h2>
           </Reveal>
           <div className="stack">
             {config.systems.map((item, index) => (
               <Reveal key={item.title} delay={index * 90}>
                 <article className="system-card">
-                  <Image
-                    className="ratio-4x3"
-                    src={item.image}
-                    alt={item.alt}
-                    width={900}
-                    height={675}
-                    sizes="(max-width: 1080px) 100vw, 320px"
-                  />
+                  <NeonPlaceholder label={`${item.number} ${item.title}`} caption={item.image} minHeight={260} />
                   <div className="system-copy">
-                    <p className="system-number">{item.number}</p>
+                    <p className="system-number">Sistema {item.number}</p>
                     <h3>{item.title}</h3>
                     <p>{item.text}</p>
                   </div>
@@ -180,21 +168,14 @@ export function LandingPage({ config }: LandingPageProps) {
           <div className="container">
             <Reveal>
               <p className="section-kicker">Materiales</p>
-              <h2>Material primero, marca en segundo plano</h2>
+              <h2>Catalogo tecnico con descargas directas</h2>
             </Reveal>
             <div className="grid grid-3">
               {config.materials.map((item, index) => (
                 <Reveal key={item.title} delay={index * 80}>
-                  <article className="card">
-                    <Image
-                      className="ratio-4x3"
-                      src={item.image}
-                      alt={item.alt}
-                      width={900}
-                      height={675}
-                      sizes="(max-width: 640px) 100vw, (max-width: 1080px) 50vw, 33vw"
-                    />
-                    <div className="card-body">
+                  <article className="card card-pad">
+                    <NeonPlaceholder label={item.subtitle} caption={item.image} minHeight={220} />
+                    <div className="card-body" style={{ paddingInline: 0, paddingBottom: 0 }}>
                       <p className="mini-kicker">{item.subtitle}</p>
                       <h3>{item.title}</h3>
                       <p>{item.text}</p>
@@ -224,7 +205,7 @@ export function LandingPage({ config }: LandingPageProps) {
           <section className="section container">
             <Reveal>
               <p className="section-kicker">Especificaciones</p>
-              <h2>Tabla técnica del material</h2>
+              <h2>Ficha tecnica sintetica</h2>
             </Reveal>
             <Reveal delay={80}>
               <div className="card card-pad">
@@ -232,7 +213,7 @@ export function LandingPage({ config }: LandingPageProps) {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>Parámetro</th>
+                        <th>Parametro</th>
                         <th>Detalle</th>
                       </tr>
                     </thead>
@@ -253,21 +234,14 @@ export function LandingPage({ config }: LandingPageProps) {
 
         <section className="section container">
           <Reveal>
-            <p className="section-kicker">Galería</p>
-            <h2>Referencias visuales limpias y repetibles</h2>
+            <p className="section-kicker">Galeria de referencia</p>
+            <h2>Bloques visuales para sustituir por contenido final</h2>
           </Reveal>
           <div className="grid grid-3">
             {config.gallery.map((item, index) => (
               <Reveal key={`${item.alt}-${index}`} delay={index * 70}>
-                <article className="card gallery-card">
-                  <Image
-                    className="ratio-4x3"
-                    src={item.image}
-                    alt={item.alt}
-                    width={900}
-                    height={675}
-                    sizes="(max-width: 640px) 100vw, (max-width: 1080px) 50vw, 33vw"
-                  />
+                <article className="card card-pad gallery-card">
+                  <NeonPlaceholder label={`Frame ${index + 1}`} caption={item.image} minHeight={230} />
                 </article>
               </Reveal>
             ))}
@@ -277,11 +251,11 @@ export function LandingPage({ config }: LandingPageProps) {
         <section className="section section-soft">
           <div className="container two-col">
             <Reveal>
-              <p className="section-kicker">Bloque técnico</p>
-              <h2>Autoridad, claridad y argumentos reales</h2>
+              <p className="section-kicker">Bloque tecnico</p>
+              <h2>Mensajes para arquitectos y direccion de proyecto</h2>
               <p className="lead-text">
-                Este bloque concentra el valor racional de la propuesta para facilitar decisiones técnicas y
-                comerciales.
+                Argumentos de durabilidad, normativa, trazabilidad y operacion para soportar decisiones de
+                especificacion.
               </p>
             </Reveal>
             <Reveal delay={80}>
@@ -297,37 +271,37 @@ export function LandingPage({ config }: LandingPageProps) {
         </section>
 
         <section className="section container">
-          <Reveal>
-            <article className="banner-card">
-              <Image
-                className="ratio-16x9"
-                src={config.maderBalear.image}
-                alt={config.maderBalear.title}
-                width={1600}
-                height={900}
-                sizes="100vw"
+          <div className="two-col">
+            <Reveal>
+              <NeonPlaceholder
+                label="Bloque diferencial"
+                caption={config.maderBalear.image}
+                minHeight={300}
               />
-              <div className="banner-overlay" />
-              <div className="banner-content">
-                <p className="section-kicker section-kicker-light">Universo diferencial</p>
+            </Reveal>
+            <Reveal delay={80}>
+              <div className="card card-pad">
+                <p className="section-kicker">Universo complementario</p>
                 <h2>{config.maderBalear.title}</h2>
-                <p>{config.maderBalear.text}</p>
-                <a className="btn btn-light" href="#contact">
+                <p className="lead-text" style={{ marginBottom: "1rem" }}>
+                  {config.maderBalear.text}
+                </p>
+                <a className="btn btn-primary" href="#contact">
                   {config.maderBalear.ctaLabel}
                 </a>
               </div>
-            </article>
-          </Reveal>
+            </Reveal>
+          </div>
         </section>
 
         <section id="contact" className="section section-dark">
           <div className="container two-col contact-wrap">
             <Reveal>
               <p className="section-kicker section-kicker-light">Contacto</p>
-              <h2>Solicite información para su proyecto</h2>
+              <h2>Solicita evaluacion tecnica para tu proyecto</h2>
               <p className="lead-text">
-                Esta sección cierra cada landing con una llamada clara a contacto y WhatsApp para reducir
-                fricción en la captación.
+                Cierre comercial directo con formulario y WhatsApp para acelerar respuesta a cliente final,
+                arquitectura y prescripcion.
               </p>
               <div className="hero-actions" style={{ marginTop: "1rem" }}>
                 <a
@@ -340,7 +314,7 @@ export function LandingPage({ config }: LandingPageProps) {
                     })
                   }
                 >
-                  Hablar con un asesor técnico
+                  Hablar con asesor tecnico
                 </a>
               </div>
             </Reveal>

@@ -441,7 +441,7 @@ export function AdminApp() {
                     />
                   </label>
                   <label>
-                    Hero imagen URL
+                    Hero referencia media
                     <input
                       className="input-field"
                       value={landingOverrides[slug]?.heroImage ?? ""}

@@ -6,20 +6,18 @@ export const LANDING_OVERRIDES_CHANGED_EVENT = "gavejo:landing-overrides-changed
 const DEFAULT_OVERRIDES: LandingOverrideMap = {
   fachadas: {
     active: true,
-    heroTitle: "Fachadas y revestimientos de madera con criterio tecnico",
+    heroTitle: "Fachadas y revestimientos de biomateriales avanzados",
     heroDescription:
-      "Soluciones para proyectos residenciales y contract con lectura arquitectonica, desempeno exterior y soporte comercial especializado.",
-    heroImage:
-      "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1600&q=80",
+      "Landing orientada a captacion para proyectos de fachada ventilada, revestimiento continuo y rehabilitacion premium con trazabilidad y enfoque tecnico.",
+    heroImage: "PH-HERO-FACHADAS-001",
     ctaPrimaryLabel: "Solicitar informacion"
   },
   "termo-tratada": {
     active: true,
-    heroTitle: "Madera termo tratada para fachadas, deck y envolventes",
+    heroTitle: "Madera termo tratada para fachadas, deck y sistemas exteriores",
     heroDescription:
-      "Material de alto desempeno con estabilidad dimensional y estetica calida para arquitectura contemporanea.",
-    heroImage:
-      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1600&q=80",
+      "Landing centrada en el material: fundamentos termodinamicos, rendimiento biologico y especificaciones para arquitectura y paisajismo.",
+    heroImage: "PH-HERO-TERMO-001",
     ctaPrimaryLabel: "Solicitar informacion"
   }
 };

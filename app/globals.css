@@ -190,6 +190,23 @@ p {
   color: #fff;
 }
 
+.hero-architectural {
+  background:
+    radial-gradient(circle at 12% 16%, rgba(79, 70, 229, 0.35), transparent 42%),
+    linear-gradient(145deg, #060b19 0%, #111827 42%, #1f2937 100%);
+}
+
+.hero-architectural .hero-content {
+  min-height: auto;
+  align-items: center;
+  padding: 6.2rem 0 4.4rem;
+}
+
+.hero-content-grid {
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 2rem;
+}
+
 .hero-content p {
   max-width: 700px;
   color: rgba(255, 255, 255, 0.9);
@@ -521,6 +538,83 @@ p {
   margin-bottom: 1.2rem;
 }
 
+.home-hero-shell {
+  background:
+    radial-gradient(circle at 88% 10%, rgba(79, 70, 229, 0.18), transparent 32%),
+    linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
+}
+
+.home-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.neon-placeholder {
+  border: 2px solid #66ff33;
+  border-radius: 22px;
+  background:
+    linear-gradient(0deg, rgba(102, 255, 51, 0.06), rgba(102, 255, 51, 0.06)),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(102, 255, 51, 0.08) 0,
+      rgba(102, 255, 51, 0.08) 8px,
+      rgba(15, 23, 42, 0.2) 8px,
+      rgba(15, 23, 42, 0.2) 16px
+    );
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  box-shadow:
+    0 0 0 1px rgba(102, 255, 51, 0.35) inset,
+    0 16px 40px rgba(102, 255, 51, 0.14);
+}
+
+.neon-core {
+  position: absolute;
+  inset: 18%;
+  border-radius: 16px;
+  border: 1px solid rgba(102, 255, 51, 0.75);
+  box-shadow:
+    0 0 26px rgba(102, 255, 51, 0.35),
+    inset 0 0 18px rgba(102, 255, 51, 0.24);
+}
+
+.neon-content {
+  position: absolute;
+  inset: auto 1rem 1rem 1rem;
+  background: rgba(3, 7, 18, 0.68);
+  border: 1px solid rgba(102, 255, 51, 0.55);
+  border-radius: 14px;
+  padding: 0.7rem 0.8rem;
+  display: grid;
+  gap: 0.32rem;
+}
+
+.neon-label {
+  margin: 0;
+  color: #d9ffcc;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.neon-caption {
+  margin: 0;
+  color: #c4d5bf;
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
 .admin-shell {
   min-height: 100vh;
   display: grid;
@@ -765,6 +859,11 @@ p {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .hero-content-grid,
+  .home-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
   .grid-3,
   .admin-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -803,6 +902,10 @@ p {
 @media (max-width: 640px) {
   .section {
     padding: 3.5rem 0;
+  }
+
+  .kpi-strip {
+    grid-template-columns: 1fr;
   }
 
   .grid-4,
