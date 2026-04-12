@@ -33,8 +33,11 @@ export default function BlogPage() {
             <article key={post.id} className="card card-pad">
               <p className="mini-kicker">Publicado - {new Date(post.updatedAt).toLocaleDateString("es-ES")}</p>
               <h3>{post.title}</h3>
-              <p>{post.excerpt}</p>
-              <p className="lead-text">{post.content}</p>
+              <p className="blog-excerpt">{post.excerpt}</p>
+              <p className="lead-text blog-post-content">{post.content}</p>
+              <Link href="/contacto" className="btn btn-ghost" style={{ marginTop: "0.7rem" }}>
+                Solicitar informacion
+              </Link>
             </article>
           ))}
           {published.length === 0 && (

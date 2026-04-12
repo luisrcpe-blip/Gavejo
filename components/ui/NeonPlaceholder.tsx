@@ -5,15 +5,20 @@ type NeonPlaceholderProps = {
   caption?: string;
   className?: string;
   minHeight?: number;
+  aspectRatio?: string;
 };
 
 export function NeonPlaceholder({
   label,
   caption = "Placeholder visual: reemplazar por media final",
   className,
-  minHeight = 260
+  minHeight = 260,
+  aspectRatio = "1 / 1"
 }: NeonPlaceholderProps) {
-  const style = { "--placeholder-min-height": `${minHeight}px` } as CSSProperties;
+  const style = {
+    "--placeholder-min-height": `${minHeight}px`,
+    "--placeholder-aspect-ratio": aspectRatio
+  } as CSSProperties;
 
   return (
     <div className={`neon-placeholder ${className ?? ""}`} style={style}>

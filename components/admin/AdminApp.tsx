@@ -73,6 +73,7 @@ export function AdminApp() {
   const [pagesError, setPagesError] = useState<string | null>(null);
   const [landingsError, setLandingsError] = useState<string | null>(null);
   const [blogError, setBlogError] = useState<string | null>(null);
+  const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
   const [blogEditor, setBlogEditor] = useState<{
     id?: string;
     title: string;
@@ -154,6 +155,18 @@ export function AdminApp() {
     return { total, fresh, progress, closed };
   }, [leads]);
 
+  useEffect(() => {
+    setNoteDrafts((prev) => {
+      const next = { ...prev };
+      leads.forEach((lead) => {
+        if (next[lead.id] === undefined) {
+          next[lead.id] = lead.notes ?? "";
+        }
+      });
+      return next;
+    });
+  }, [leads]);
+
   const exportCsv = () => {
     const csv = leadsToCsv(leads);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -164,6 +177,12 @@ export function AdminApp() {
     link.click();
     URL.revokeObjectURL(url);
   };
+
+  const setDraftNote = (id: string, value: string) => {
+    setNoteDrafts((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const getDraftNote = (lead: Lead) => noteDrafts[lead.id] ?? lead.notes ?? "";
 
   const saveSettingsAction = async () => {
     try {
@@ -238,6 +257,15 @@ export function AdminApp() {
       });
     } catch {
       setCrmError("No se pudo guardar el cambio en MySQL. Revisa conexion DB_* en Hostinger.");
+    }
+  };
+
+  const saveLeadNote = async (leadId: string) => {
+    try {
+      setCrmError(null);
+      await updateLeadNotes(leadId, noteDrafts[leadId] ?? "");
+    } catch {
+      setCrmError("No se pudieron guardar notas en MySQL. Revisa conexion DB_* en Hostinger.");
     }
   };
 
@@ -338,7 +366,7 @@ export function AdminApp() {
                 Guardar cambios
               </button>
             </div>
-            <div className="table-wrap">
+            <div className="table-wrap desktop-only">
               <table className="table">
                 <thead>
                   <tr>
@@ -383,6 +411,40 @@ export function AdminApp() {
                   ))}
                 </tbody>
               </table>
+            </div>
+            <div className="mobile-only admin-mobile-list">
+              {pageMeta.map((page) => (
+                <article key={page.key} className="admin-mobile-item">
+                  <p className="mini-kicker">{page.route}</p>
+                  <h4>{page.title}</h4>
+                  <label>
+                    H1
+                    <input
+                      className="input-field"
+                      value={page.h1}
+                      onChange={(event) =>
+                        setPageMeta((prev) =>
+                          prev.map((item) => (item.key === page.key ? { ...item, h1: event.target.value } : item))
+                        )
+                      }
+                    />
+                  </label>
+                  <label>
+                    SEO title
+                    <input
+                      className="input-field"
+                      value={page.seoTitle}
+                      onChange={(event) =>
+                        setPageMeta((prev) =>
+                          prev.map((item) =>
+                            item.key === page.key ? { ...item, seoTitle: event.target.value } : item
+                          )
+                        )
+                      }
+                    />
+                  </label>
+                </article>
+              ))}
             </div>
             {pageSaveState === "saved" && <p className="saved-pill">Paginas guardadas.</p>}
             {pagesError && <p className="form-feedback error">{pagesError}</p>}
@@ -588,7 +650,7 @@ export function AdminApp() {
               </button>
             </div>
             {crmError && <p className="form-feedback error">{crmError}</p>}
-            <div className="table-wrap">
+            <div className="table-wrap desktop-only">
               <table className="table">
                 <thead>
                   <tr>
@@ -611,7 +673,7 @@ export function AdminApp() {
                         <select
                           className={`status-select status-${lead.status}`}
                           value={lead.status}
-                          onChange={(event) => updateLead(lead, event.target.value as LeadStatus)}
+                          onChange={(event) => void updateLead(lead, event.target.value as LeadStatus)}
                         >
                           <option value="new">Nuevo</option>
                           <option value="in_progress">En gestion</option>
@@ -621,16 +683,17 @@ export function AdminApp() {
                       <td>
                         <textarea
                           className="note-input"
-                          value={lead.notes}
+                          value={getDraftNote(lead)}
                           placeholder="Notas internas"
-                          onChange={(event) => {
-                            void updateLeadNotes(lead.id, event.target.value).catch(() => {
-                              setCrmError(
-                                "No se pudieron guardar notas en MySQL. Revisa conexion DB_* en Hostinger."
-                              );
-                            });
-                          }}
+                          onChange={(event) => setDraftNote(lead.id, event.target.value)}
                         />
+                        <button
+                          className="btn btn-ghost"
+                          style={{ marginTop: "0.45rem" }}
+                          onClick={() => void saveLeadNote(lead.id)}
+                        >
+                          Guardar nota
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -641,6 +704,48 @@ export function AdminApp() {
                   )}
                 </tbody>
               </table>
+            </div>
+            <div className="mobile-only admin-mobile-list">
+              {leads.map((lead) => (
+                <article key={lead.id} className="admin-mobile-item">
+                  <div className="row-between" style={{ marginBottom: "0.5rem" }}>
+                    <h4>{lead.name}</h4>
+                    <span className="mini-kicker">{new Date(lead.createdAt).toLocaleDateString("es-ES")}</span>
+                  </div>
+                  <p className="hint" style={{ marginBottom: "0.5rem" }}>
+                    {lead.contact} · {lead.originLanding}
+                  </p>
+                  <label>
+                    Estado
+                    <select
+                      className={`status-select status-${lead.status}`}
+                      value={lead.status}
+                      onChange={(event) => void updateLead(lead, event.target.value as LeadStatus)}
+                    >
+                      <option value="new">Nuevo</option>
+                      <option value="in_progress">En gestion</option>
+                      <option value="closed">Cerrado</option>
+                    </select>
+                  </label>
+                  <label>
+                    Notas
+                    <textarea
+                      className="note-input"
+                      value={getDraftNote(lead)}
+                      placeholder="Notas internas"
+                      onChange={(event) => setDraftNote(lead.id, event.target.value)}
+                    />
+                  </label>
+                  <button className="btn btn-ghost" onClick={() => void saveLeadNote(lead.id)}>
+                    Guardar nota
+                  </button>
+                </article>
+              ))}
+              {leads.length === 0 && (
+                <article className="admin-mobile-item">
+                  Todavia no hay leads. Envia una consulta desde cualquiera de las landings.
+                </article>
+              )}
             </div>
           </section>
         )}

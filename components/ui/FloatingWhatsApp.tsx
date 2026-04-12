@@ -10,10 +10,37 @@ type FloatingWhatsAppProps = {
 
 export function FloatingWhatsApp({ sourcePage }: FloatingWhatsAppProps) {
   const [phone, setPhone] = useState(getDemoSettings().whatsappNumber);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     void syncSettingsFromServer().then(() => setPhone(getDemoSettings().whatsappNumber));
     return subscribeSettings(() => setPhone(getDemoSettings().whatsappNumber));
+  }, []);
+
+  useEffect(() => {
+    const onFocusIn = (event: FocusEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+      if (target.matches("input, textarea, select, [contenteditable='true']")) {
+        setHidden(true);
+      }
+    };
+
+    const onFocusOut = () => {
+      setTimeout(() => {
+        const active = document.activeElement as HTMLElement | null;
+        if (!active || !active.matches("input, textarea, select, [contenteditable='true']")) {
+          setHidden(false);
+        }
+      }, 0);
+    };
+
+    window.addEventListener("focusin", onFocusIn);
+    window.addEventListener("focusout", onFocusOut);
+    return () => {
+      window.removeEventListener("focusin", onFocusIn);
+      window.removeEventListener("focusout", onFocusOut);
+    };
   }, []);
 
   const href = useMemo(() => {
@@ -25,7 +52,7 @@ export function FloatingWhatsApp({ sourcePage }: FloatingWhatsAppProps) {
 
   return (
     <a
-      className="wa-float"
+      className={`wa-float ${hidden ? "is-hidden" : ""}`}
       href={href}
       target="_blank"
       rel="noreferrer"

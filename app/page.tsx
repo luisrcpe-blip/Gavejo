@@ -36,6 +36,7 @@ export default function HomePage() {
                 label="Placeholder portada corporativa"
                 caption="Cuadrado verde fosforescente para reemplazar por imagen real"
                 minHeight={360}
+                aspectRatio="16 / 10"
               />
             </Reveal>
           </div>
@@ -65,21 +66,36 @@ export default function HomePage() {
           <div className="container grid grid-3">
             <Reveal>
               <article className="card card-pad">
-                <NeonPlaceholder label="Prime Forest" caption="Silvicultura y frondosas europeas" minHeight={210} />
+                <NeonPlaceholder
+                  label="Prime Forest"
+                  caption="Silvicultura y frondosas europeas"
+                  minHeight={210}
+                  aspectRatio="4 / 3"
+                />
                 <h3 style={{ marginTop: "1rem" }}>Origen forestal controlado</h3>
                 <p>Base de abastecimiento responsable para proyectos con exigencia tecnica y legal.</p>
               </article>
             </Reveal>
             <Reveal delay={90}>
               <article className="card card-pad">
-                <NeonPlaceholder label="Treecraft Plywood" caption="Ingenieria de tablero y CE" minHeight={210} />
+                <NeonPlaceholder
+                  label="Treecraft Plywood"
+                  caption="Ingenieria de tablero y CE"
+                  minHeight={210}
+                  aspectRatio="4 / 3"
+                />
                 <h3 style={{ marginTop: "1rem" }}>Paneles con trazabilidad transcontinental</h3>
                 <p>Control de calidad en fabrica y cumplimiento de estandares europeos.</p>
               </article>
             </Reveal>
             <Reveal delay={180}>
               <article className="card card-pad">
-                <NeonPlaceholder label="Tantimber / LDCwood" caption="Termo modificacion y cladding" minHeight={210} />
+                <NeonPlaceholder
+                  label="Tantimber / LDCwood"
+                  caption="Termo modificacion y cladding"
+                  minHeight={210}
+                  aspectRatio="4 / 3"
+                />
                 <h3 style={{ marginTop: "1rem" }}>Material para envolvente y deck</h3>
                 <p>Catalogo tecnico con aplicaciones reales para arquitectura y sector contract.</p>
               </article>
@@ -110,6 +126,7 @@ export default function HomePage() {
                 label="Placeholder dashboard comercial"
                 caption="Sustituir por captura real del flujo CRM"
                 minHeight={300}
+                aspectRatio="16 / 10"
               />
             </Reveal>
           </div>

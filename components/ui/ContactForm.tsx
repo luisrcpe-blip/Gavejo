@@ -69,24 +69,38 @@ export function ContactForm({ originLanding }: ContactFormProps) {
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
       <div className="form-grid">
-        <input
-          className="input-field"
-          placeholder="Nombre y apellidos"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-        />
-        <input
-          className="input-field"
-          placeholder="Email o telefono"
-          value={contact}
-          onChange={(event) => setContact(event.target.value)}
-        />
-        <textarea
-          className="input-field textarea"
-          placeholder="Cuentanos brevemente tu proyecto"
-          value={message}
-          onChange={(event) => setMessage(event.target.value)}
-        />
+        <label className="field-group">
+          <span className="field-label">Nombre y apellidos</span>
+          <input
+            className="input-field"
+            type="text"
+            autoComplete="name"
+            placeholder="Ejemplo: Ana Torres"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+        </label>
+        <label className="field-group">
+          <span className="field-label">Email o telefono</span>
+          <input
+            className="input-field"
+            type="text"
+            inputMode="email"
+            autoComplete="email"
+            placeholder="email@empresa.com o +34..."
+            value={contact}
+            onChange={(event) => setContact(event.target.value)}
+          />
+        </label>
+        <label className="field-group">
+          <span className="field-label">Proyecto</span>
+          <textarea
+            className="input-field textarea"
+            placeholder="Cuentanos brevemente tu proyecto"
+            value={message}
+            onChange={(event) => setMessage(event.target.value)}
+          />
+        </label>
         <label className="consent-row">
           <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
           <span>

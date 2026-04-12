@@ -104,7 +104,12 @@ export function LandingPage({ config }: LandingPageProps) {
             </Reveal>
 
             <Reveal delay={120}>
-              <NeonPlaceholder label="Visual hero" caption={`Referencia actual: ${heroAssetRef}`} minHeight={340} />
+              <NeonPlaceholder
+                label="Visual hero"
+                caption={`Referencia actual: ${heroAssetRef}`}
+                minHeight={340}
+                aspectRatio="16 / 10"
+              />
             </Reveal>
           </div>
         </section>
@@ -131,7 +136,7 @@ export function LandingPage({ config }: LandingPageProps) {
               {config.applications.map((item, index) => (
                 <Reveal key={item.title} delay={index * 80}>
                   <article className="card card-pad">
-                    <NeonPlaceholder label={item.title} caption={item.image} minHeight={220} />
+                    <NeonPlaceholder label={item.title} caption={item.image} minHeight={220} aspectRatio="4 / 3" />
                     <div className="card-body" style={{ paddingInline: 0, paddingBottom: 0 }}>
                       <h3>{item.title}</h3>
                       <p>{item.text}</p>
@@ -152,7 +157,12 @@ export function LandingPage({ config }: LandingPageProps) {
             {config.systems.map((item, index) => (
               <Reveal key={item.title} delay={index * 90}>
                 <article className="system-card">
-                  <NeonPlaceholder label={`${item.number} ${item.title}`} caption={item.image} minHeight={260} />
+                  <NeonPlaceholder
+                    label={`${item.number} ${item.title}`}
+                    caption={item.image}
+                    minHeight={260}
+                    aspectRatio="4 / 3"
+                  />
                   <div className="system-copy">
                     <p className="system-number">Sistema {item.number}</p>
                     <h3>{item.title}</h3>
@@ -174,7 +184,12 @@ export function LandingPage({ config }: LandingPageProps) {
               {config.materials.map((item, index) => (
                 <Reveal key={item.title} delay={index * 80}>
                   <article className="card card-pad">
-                    <NeonPlaceholder label={item.subtitle} caption={item.image} minHeight={220} />
+                    <NeonPlaceholder
+                      label={item.subtitle}
+                      caption={item.image}
+                      minHeight={220}
+                      aspectRatio="4 / 3"
+                    />
                     <div className="card-body" style={{ paddingInline: 0, paddingBottom: 0 }}>
                       <p className="mini-kicker">{item.subtitle}</p>
                       <h3>{item.title}</h3>
@@ -241,7 +256,12 @@ export function LandingPage({ config }: LandingPageProps) {
             {config.gallery.map((item, index) => (
               <Reveal key={`${item.alt}-${index}`} delay={index * 70}>
                 <article className="card card-pad gallery-card">
-                  <NeonPlaceholder label={`Frame ${index + 1}`} caption={item.image} minHeight={230} />
+                  <NeonPlaceholder
+                    label={`Frame ${index + 1}`}
+                    caption={item.image}
+                    minHeight={230}
+                    aspectRatio="4 / 3"
+                  />
                 </article>
               </Reveal>
             ))}
@@ -277,6 +297,7 @@ export function LandingPage({ config }: LandingPageProps) {
                 label="Bloque diferencial"
                 caption={config.maderBalear.image}
                 minHeight={300}
+                aspectRatio="16 / 10"
               />
             </Reveal>
             <Reveal delay={80}>
