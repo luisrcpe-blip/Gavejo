@@ -1,0 +1,29 @@
+CREATE TABLE IF NOT EXISTS app_state (
+  state_key VARCHAR(100) NOT NULL PRIMARY KEY,
+  state_json LONGTEXT NOT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS leads (
+  id VARCHAR(64) NOT NULL PRIMARY KEY,
+  name VARCHAR(200) NOT NULL,
+  contact VARCHAR(200) NOT NULL,
+  message TEXT NOT NULL,
+  origin_landing VARCHAR(120) NOT NULL,
+  status ENUM('new', 'in_progress', 'closed') NOT NULL DEFAULT 'new',
+  notes TEXT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  consent TINYINT(1) NOT NULL DEFAULT 0,
+  utm_source VARCHAR(120) NULL,
+  utm_campaign VARCHAR(120) NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS analytics_events (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  event_name VARCHAR(64) NOT NULL,
+  source_page VARCHAR(255) NOT NULL,
+  metadata_json TEXT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_event_name (event_name),
+  INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
