@@ -1,5 +1,15 @@
 import Link from "next/link";
 
+const NAV_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/soluciones", label: "Soluciones" },
+  { href: "/materiales", label: "Materiales" },
+  { href: "/mader-balear", label: "Mader Balear" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contacto", label: "Contacto" },
+  { href: "/admin", label: "Admin" }
+];
+
 export function PublicHeader() {
   return (
     <header className="topbar">
@@ -9,15 +19,20 @@ export function PublicHeader() {
           <div className="brand-sub">Demo corporativa</div>
         </div>
         <nav className="topnav">
-          <Link href="/">Home</Link>
-          <Link href="/soluciones">Soluciones</Link>
-          <Link href="/materiales">Materiales</Link>
-          <Link href="/mader-balear">Mader Balear</Link>
-          <Link href="/blog">Blog</Link>
-          <Link href="/contacto">Contacto</Link>
-          <Link href="/admin">Admin</Link>
+          {NAV_LINKS.map((item) => (
+            <Link key={item.href} href={item.href}>
+              {item.label}
+            </Link>
+          ))}
         </nav>
       </div>
+      <nav className="container mobile-topnav" aria-label="Navegacion movil">
+        {NAV_LINKS.map((item) => (
+          <Link key={item.href} href={item.href}>
+            {item.label}
+          </Link>
+        ))}
+      </nav>
     </header>
   );
 }

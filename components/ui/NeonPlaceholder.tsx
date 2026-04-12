@@ -13,8 +13,10 @@ export function NeonPlaceholder({
   className,
   minHeight = 260
 }: NeonPlaceholderProps) {
+  const style = { "--placeholder-min-height": `${minHeight}px` } as CSSProperties;
+
   return (
-    <div className={`neon-placeholder ${className ?? ""}`} style={{ minHeight } as CSSProperties}>
+    <div className={`neon-placeholder ${className ?? ""}`} style={style}>
       <div className="neon-core" />
       <div className="neon-content">
         <p className="neon-label">{label}</p>
