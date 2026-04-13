@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+type HeaderVariant = "solid" | "overlay" | "clean";
+
 const NAV_LINKS = [
   { href: "/", label: "Inicio" },
   { href: "/soluciones", label: "Soluciones" },
@@ -16,6 +18,10 @@ const NAV_LINKS = [
 
 export function PublicHeader() {
   const pathname = usePathname();
+  const landingRoutes = ["/soluciones/fachadas", "/materiales/termo-tratada"];
+
+  const variant: HeaderVariant =
+    pathname === "/" ? "solid" : landingRoutes.some((route) => pathname.startsWith(route)) ? "overlay" : "clean";
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -23,7 +29,7 @@ export function PublicHeader() {
   };
 
   return (
-    <header className="topbar">
+    <header className={`topbar topbar-${variant}`}>
       <div className="container topbar-inner">
         <Link href="/" className="brand-link" aria-label="Volver al inicio">
           <span className="brand-logo-shell">
