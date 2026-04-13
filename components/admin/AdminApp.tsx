@@ -45,14 +45,14 @@ import {
 
 type AdminModule = "dashboard" | "pages" | "landings" | "blog" | "media" | "crm" | "settings";
 
-const MODULES: Array<{ key: AdminModule; label: string; mobileLabel?: string }> = [
-  { key: "dashboard", label: "Panel" },
-  { key: "pages", label: "Páginas" },
-  { key: "landings", label: "Landings" },
-  { key: "blog", label: "Blog" },
-  { key: "media", label: "Medios" },
-  { key: "crm", label: "CRM de leads", mobileLabel: "CRM" },
-  { key: "settings", label: "Ajustes" }
+const MODULES: Array<{ key: AdminModule; label: string; mobileLabel?: string; icon: string }> = [
+  { key: "dashboard", label: "Panel", icon: "PN" },
+  { key: "pages", label: "Páginas", icon: "PG" },
+  { key: "landings", label: "Landings", icon: "LD" },
+  { key: "blog", label: "Blog", icon: "BL" },
+  { key: "media", label: "Medios", icon: "MD" },
+  { key: "crm", label: "CRM de leads", mobileLabel: "CRM", icon: "CR" },
+  { key: "settings", label: "Ajustes", icon: "AJ" }
 ];
 
 export function AdminApp() {
@@ -282,8 +282,11 @@ export function AdminApp() {
     <div className="admin-shell">
       <aside className="admin-sidebar">
         <div className="admin-brand">
-          <h1>GAVEJO</h1>
-          <p>Panel de demo</p>
+          <div className="admin-brand-mark">GV</div>
+          <div className="admin-brand-copy">
+            <h1>GAVEJO</h1>
+            <p>Panel administrativo</p>
+          </div>
         </div>
         <button
           type="button"
@@ -310,6 +313,9 @@ export function AdminApp() {
                 setMenuOpenMobile(false);
               }}
             >
+              <span className="nav-icon" aria-hidden="true">
+                {item.icon}
+              </span>
               <span className="nav-label nav-label-desktop">{item.label}</span>
               <span className="nav-label nav-label-mobile">{item.mobileLabel ?? item.label}</span>
               {item.key === "crm" && summary.fresh > 0 && <span className="badge-pulse">{summary.fresh}</span>}
@@ -320,13 +326,19 @@ export function AdminApp() {
 
       <main className="admin-main">
         <header className="admin-top">
-          <div>
+          <div className="admin-top-copy">
             <h2>Panel de administración</h2>
             <p>Demo funcional para validación comercial y operativa.</p>
+            <div className="admin-top-pills">
+              <span className="admin-pill">Leads: {summary.total}</span>
+              <span className="admin-pill">Nuevos: {summary.fresh}</span>
+              <span className="admin-pill admin-pill-accent">Estado: Demo activa</span>
+            </div>
           </div>
+          <div className="admin-top-cta">Centro de control</div>
         </header>
 
-        <p className="hint" style={{ marginBottom: "0.9rem" }}>
+        <p className="hint admin-intro-hint">
           Operativo en demo: CRM, Blog, Landings y Ajustes con persistencia MySQL. Preparado para fase
           productiva: autenticación avanzada y gestor de medios completo.
         </p>
