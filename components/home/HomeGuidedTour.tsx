@@ -94,20 +94,25 @@ export function HomeGuidedTour() {
   useEffect(() => {
     if (!isOpen) return;
 
-    const body = document.body;
-    const html = document.documentElement;
-    const previousBodyOverflow = body.style.overflow;
-    const previousHtmlOverflow = html.style.overflow;
-    const previousBodyTouchAction = body.style.touchAction;
+    const preventDefault = (event: Event) => {
+      event.preventDefault();
+    };
 
-    body.style.overflow = "hidden";
-    html.style.overflow = "hidden";
-    body.style.touchAction = "none";
+    const preventKeys = (event: KeyboardEvent) => {
+      const blockedKeys = ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "];
+      if (blockedKeys.includes(event.key)) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener("wheel", preventDefault, { passive: false });
+    window.addEventListener("touchmove", preventDefault, { passive: false });
+    window.addEventListener("keydown", preventKeys, { passive: false });
 
     return () => {
-      body.style.overflow = previousBodyOverflow;
-      html.style.overflow = previousHtmlOverflow;
-      body.style.touchAction = previousBodyTouchAction;
+      window.removeEventListener("wheel", preventDefault as EventListener);
+      window.removeEventListener("touchmove", preventDefault as EventListener);
+      window.removeEventListener("keydown", preventKeys as EventListener);
     };
   }, [isOpen]);
 
