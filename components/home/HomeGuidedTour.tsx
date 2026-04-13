@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type TourStep = {
   title: string;
@@ -87,12 +87,24 @@ export function HomeGuidedTour() {
   const [cardStyle, setCardStyle] = useState<CSSProperties>({});
   const highlightedRef = useRef<HTMLElement | null>(null);
   const cardRef = useRef<HTMLElement | null>(null);
+  const initialScrollYRef = useRef<number>(0);
 
   const activeStep = useMemo(() => TOUR_STEPS[stepIndex], [stepIndex]);
   const isLastStep = stepIndex === TOUR_STEPS.length - 1;
 
+  const clearHighlights = useCallback(() => {
+    if (highlightedRef.current) {
+      highlightedRef.current.classList.remove("tour-highlight-target");
+      highlightedRef.current = null;
+    }
+    document.querySelectorAll(".tour-highlight-target").forEach((node) => {
+      node.classList.remove("tour-highlight-target");
+    });
+  }, []);
+
   useEffect(() => {
     if (!isOpen) return;
+    initialScrollYRef.current = window.scrollY;
 
     const preventDefault = (event: Event) => {
       event.preventDefault();
@@ -119,16 +131,13 @@ export function HomeGuidedTour() {
   useEffect(() => {
     if (!isOpen) return;
 
-    if (highlightedRef.current) {
-      highlightedRef.current.classList.remove("tour-highlight-target");
-      highlightedRef.current = null;
-    }
+    clearHighlights();
 
     const target = findTarget(activeStep.targets) as HTMLElement | null;
     if (target) {
       highlightedRef.current = target;
       target.classList.add("tour-highlight-target");
-      target.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+      target.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
     }
 
     const computeLayout = () => {
@@ -219,28 +228,21 @@ export function HomeGuidedTour() {
       window.cancelAnimationFrame(raf);
       window.removeEventListener("resize", computeLayout);
       window.removeEventListener("scroll", computeLayout);
-      if (highlightedRef.current) {
-        highlightedRef.current.classList.remove("tour-highlight-target");
-        highlightedRef.current = null;
-      }
+      clearHighlights();
     };
-  }, [activeStep, isOpen]);
+  }, [activeStep, clearHighlights, isOpen]);
 
   useEffect(() => {
     return () => {
-      if (highlightedRef.current) {
-        highlightedRef.current.classList.remove("tour-highlight-target");
-        highlightedRef.current = null;
-      }
+      clearHighlights();
     };
-  }, []);
+  }, [clearHighlights]);
 
   const closeTour = () => {
-    if (highlightedRef.current) {
-      highlightedRef.current.classList.remove("tour-highlight-target");
-      highlightedRef.current = null;
-    }
+    clearHighlights();
     setIsOpen(false);
+    setFocusRect(null);
+    window.scrollTo({ top: initialScrollYRef.current, behavior: "auto" });
   };
 
   const goNext = () => {
