@@ -19,7 +19,17 @@ const NAV_LINKS = [
 export function PublicHeader() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [comingSoonToast, setComingSoonToast] = useState<{
+    visible: boolean;
+    top: number;
+    left: number;
+    above: boolean;
+  }>({
+    visible: false,
+    top: 0,
+    left: 0,
+    above: false
+  });
   const landingRoutes = ["/soluciones/fachadas", "/materiales/termo-tratada", "/mader-balear"];
 
   const variant: HeaderVariant =
@@ -43,10 +53,13 @@ export function PublicHeader() {
   }, [variant]);
 
   useEffect(() => {
-    if (!showComingSoon) return;
-    const timeout = window.setTimeout(() => setShowComingSoon(false), 2200);
+    if (!comingSoonToast.visible) return;
+    const timeout = window.setTimeout(
+      () => setComingSoonToast((prev) => ({ ...prev, visible: false })),
+      2200
+    );
     return () => window.clearTimeout(timeout);
-  }, [showComingSoon]);
+  }, [comingSoonToast.visible]);
 
   const onMenuClick = (
     event: MouseEvent<HTMLAnchorElement>,
@@ -54,7 +67,16 @@ export function PublicHeader() {
   ) => {
     if (!item.comingSoon) return;
     event.preventDefault();
-    setShowComingSoon(true);
+    const rect = event.currentTarget.getBoundingClientRect();
+    const verticalGap = 10;
+    const preferAbove = rect.top > window.innerHeight * 0.68;
+
+    setComingSoonToast({
+      visible: true,
+      left: rect.left + rect.width / 2,
+      top: preferAbove ? rect.top - verticalGap : rect.bottom + verticalGap,
+      above: preferAbove
+    });
   };
 
   return (
@@ -99,7 +121,14 @@ export function PublicHeader() {
           </Link>
         ))}
       </nav>
-      <div className={`coming-soon-toast ${showComingSoon ? "is-visible" : ""}`} role="status" aria-live="polite">
+      <div
+        className={`coming-soon-toast ${comingSoonToast.visible ? "is-visible" : ""} ${
+          comingSoonToast.above ? "is-above" : ""
+        }`}
+        style={{ left: `${comingSoonToast.left}px`, top: `${comingSoonToast.top}px` }}
+        role="status"
+        aria-live="polite"
+      >
         <span className="coming-soon-dot" />
         <span>¡Próximamente!</span>
       </div>
