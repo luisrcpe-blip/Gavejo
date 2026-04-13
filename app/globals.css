@@ -1669,10 +1669,8 @@ p {
 /* Admin UI refresh */
 .admin-shell {
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: 308px 1fr;
-  gap: 0;
-  padding: 0;
+  display: block;
+  padding-left: 308px;
   background:
     radial-gradient(circle at 96% 0%, rgba(99, 102, 241, 0.1), transparent 30%),
     radial-gradient(circle at 0% 100%, rgba(16, 185, 129, 0.08), transparent 28%),
@@ -1680,10 +1678,11 @@ p {
 }
 
 .admin-sidebar {
-  position: sticky;
-  top: 0;
-  align-self: start;
-  min-height: 100vh;
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 308px;
+  min-height: 100dvh;
+  overflow-y: auto;
   border-radius: 0;
   border-right: 1px solid #3a4668;
   border-top: 0;
@@ -2276,7 +2275,11 @@ p {
   }
 
   .admin-shell {
-    grid-template-columns: 260px 1fr;
+    padding-left: 260px;
+  }
+
+  .admin-sidebar {
+    width: 260px;
   }
 }
 
@@ -2355,14 +2358,19 @@ p {
   }
 
   .admin-shell {
+    display: grid;
     grid-template-columns: 1fr;
+    padding-left: 0;
   }
 
   .admin-sidebar {
     position: sticky;
+    inset: auto;
+    width: auto;
     top: 0;
     z-index: 20;
     min-height: auto;
+    overflow: visible;
     padding: 0.7rem 0.65rem;
     border-right: 0;
     border-bottom: 1px solid #3b4664;

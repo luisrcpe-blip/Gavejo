@@ -288,11 +288,19 @@ export function HomeGuidedTour() {
 
     const scrollToHomeStart = () => {
       const header = document.querySelector(".topbar") as HTMLElement | null;
+      const heroGrid = document.querySelector(".home-hero-grid") as HTMLElement | null;
       const introSection = document.querySelector('[data-tour-id="section-inicio"]') as HTMLElement | null;
       const headerHeight = header ? header.getBoundingClientRect().height : 0;
+      const headerSafeGap = Math.max(12, Math.round(headerHeight * 0.16));
+
+      if (heroGrid) {
+        const top = heroGrid.getBoundingClientRect().top + window.scrollY - headerHeight - headerSafeGap;
+        window.scrollTo({ top: Math.max(0, Math.round(top)), behavior: "auto" });
+        return;
+      }
 
       if (introSection) {
-        const top = introSection.getBoundingClientRect().top + window.scrollY - headerHeight;
+        const top = introSection.getBoundingClientRect().top + window.scrollY - headerHeight - headerSafeGap;
         window.scrollTo({ top: Math.max(0, Math.round(top)), behavior: "auto" });
         return;
       }
