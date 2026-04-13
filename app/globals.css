@@ -1518,6 +1518,37 @@ p {
   border-color: #34d399;
 }
 
+.crm-status-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid #dbe4f5;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.26rem 0.6rem;
+  white-space: nowrap;
+}
+
+.crm-status-chip.status-new {
+  border-color: #93c5fd;
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.crm-status-chip.status-in_progress {
+  border-color: #fcd34d;
+  color: #92400e;
+  background: #fffbeb;
+}
+
+.crm-status-chip.status-closed {
+  border-color: #6ee7b7;
+  color: #166534;
+  background: #ecfdf5;
+}
+
 .note-input {
   width: 100%;
   min-height: 58px;
@@ -1590,6 +1621,18 @@ p {
 .admin-mobile-item h4 {
   margin: 0;
   font-size: 1rem;
+}
+
+.crm-demo-capabilities {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+  padding: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+.crm-demo-row td {
+  color: #334155;
 }
 
 .admin-mobile-head {

@@ -44,6 +44,15 @@ import {
 } from "@/lib/types";
 
 type AdminModule = "dashboard" | "pages" | "landings" | "blog" | "media" | "crm" | "settings";
+type DemoLeadPreview = {
+  id: string;
+  name: string;
+  contact: string;
+  originLanding: string;
+  status: LeadStatus;
+  createdLabel: string;
+  notes: string;
+};
 
 const MODULES: Array<{
   key: AdminModule;
@@ -59,6 +68,78 @@ const MODULES: Array<{
   { key: "crm", label: "CRM de leads", mobileLabel: "CRM", enabled: true },
   { key: "settings", label: "Ajustes", enabled: false }
 ];
+
+const CRM_DEMO_LEADS: DemoLeadPreview[] = [
+  {
+    id: "demo-1",
+    name: "Lucia Ramos",
+    contact: "lucia@estudioarco.es",
+    originLanding: "Landing Fachadas",
+    status: "new",
+    createdLabel: "Hace un momento",
+    notes: "Solicita reunión de especificación para hotel urbano."
+  },
+  {
+    id: "demo-2",
+    name: "Miguel Ortiz",
+    contact: "+34 611 223 119",
+    originLanding: "Landing Termotratada",
+    status: "in_progress",
+    createdLabel: "Hace 47 min",
+    notes: "Comparando Fraké TMT vs Ayous para terraza técnica."
+  },
+  {
+    id: "demo-3",
+    name: "Nora Delgado",
+    contact: "nora.delgado@constructa.eu",
+    originLanding: "Landing Fachadas",
+    status: "closed",
+    createdLabel: "Hace 7 h",
+    notes: "Lead cerrado. Envío de tarifa y catálogo confirmado."
+  },
+  {
+    id: "demo-4",
+    name: "Sergio Valls",
+    contact: "sergio.valls@grupoatlas.com",
+    originLanding: "Landing Termotratada",
+    status: "in_progress",
+    createdLabel: "Hace 13 h",
+    notes: "Pendiente validación técnica con dirección facultativa."
+  },
+  {
+    id: "demo-5",
+    name: "Paula Mena",
+    contact: "+34 654 882 743",
+    originLanding: "Landing Fachadas",
+    status: "new",
+    createdLabel: "Ayer · 18:20",
+    notes: "Interés en solución de revestimiento para vivienda premium."
+  },
+  {
+    id: "demo-6",
+    name: "Tomás Riu",
+    contact: "tomas.riu@riuarq.com",
+    originLanding: "Landing Termotratada",
+    status: "closed",
+    createdLabel: "12/04/2026",
+    notes: "Proyecto adjudicado. Se define calendario de suministro."
+  },
+  {
+    id: "demo-7",
+    name: "Irene Costa",
+    contact: "irene.costa@designlab.es",
+    originLanding: "Landing Fachadas",
+    status: "in_progress",
+    createdLabel: "10/04/2026",
+    notes: "Solicita muestra física y ficha técnica EN 350."
+  }
+];
+
+function getLeadStatusLabel(status: LeadStatus) {
+  if (status === "new") return "Nuevo";
+  if (status === "in_progress") return "En gestión";
+  return "Cerrado";
+}
 
 function ModuleIcon({ module }: { module: AdminModule }) {
   if (module === "dashboard") {
@@ -253,6 +334,8 @@ export function AdminApp() {
     const closed = leads.filter((lead) => lead.status === "closed").length;
     return { total, fresh, progress, closed };
   }, [leads]);
+
+  const hasRealLeads = leads.length > 0;
 
   const closeRate = useMemo(() => {
     if (summary.total === 0) return 0;
@@ -914,6 +997,27 @@ export function AdminApp() {
                 Exportar CSV
               </button>
             </div>
+            <div className="crm-demo-capabilities">
+              <p className="mini-kicker">Estado actual del CRM demo</p>
+              <ul className="mini-list">
+                <li>
+                  <strong>Leads reales</strong>
+                  <span>{hasRealLeads ? "Activos" : "Sin entradas aún"}</span>
+                </li>
+                <li>
+                  <strong>Edición de estado y notas</strong>
+                  <span>{hasRealLeads ? "Disponible" : "Visible al llegar leads reales"}</span>
+                </li>
+                <li>
+                  <strong>Exportación CSV</strong>
+                  <span>{hasRealLeads ? "Disponible" : "Deshabilitada sin datos reales"}</span>
+                </li>
+                <li>
+                  <strong>Vista de ejemplo</strong>
+                  <span>{hasRealLeads ? "Oculta" : "7 leads estáticos de demostración"}</span>
+                </li>
+              </ul>
+            </div>
             {crmError && <p className="form-feedback error">{crmError}</p>}
             <div className="table-wrap desktop-only">
               <table className="table">
@@ -928,13 +1032,71 @@ export function AdminApp() {
                   </tr>
                 </thead>
                 <tbody>
-                  {leads.map((lead) => (
-                    <tr key={lead.id}>
-                      <td>{lead.name}</td>
-                      <td>{lead.contact}</td>
-                      <td>{lead.originLanding}</td>
-                      <td>{new Date(lead.createdAt).toLocaleString("es-ES")}</td>
-                      <td>
+                  {hasRealLeads
+                    ? leads.map((lead) => (
+                        <tr key={lead.id}>
+                          <td>{lead.name}</td>
+                          <td>{lead.contact}</td>
+                          <td>{lead.originLanding}</td>
+                          <td>{new Date(lead.createdAt).toLocaleString("es-ES")}</td>
+                          <td>
+                            <select
+                              className={`status-select status-${lead.status}`}
+                              value={lead.status}
+                              onChange={(event) => void updateLead(lead, event.target.value as LeadStatus)}
+                            >
+                              <option value="new">Nuevo</option>
+                              <option value="in_progress">En gestión</option>
+                              <option value="closed">Cerrado</option>
+                            </select>
+                          </td>
+                          <td>
+                            <textarea
+                              className="note-input"
+                              value={getDraftNote(lead)}
+                              placeholder="Notas internas"
+                              onChange={(event) => setDraftNote(lead.id, event.target.value)}
+                            />
+                            <button
+                              className="btn btn-ghost"
+                              style={{ marginTop: "0.45rem" }}
+                              onClick={() => void saveLeadNote(lead.id)}
+                            >
+                              Guardar nota
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    : CRM_DEMO_LEADS.map((lead) => (
+                        <tr key={lead.id} className="crm-demo-row">
+                          <td>{lead.name}</td>
+                          <td>{lead.contact}</td>
+                          <td>{lead.originLanding}</td>
+                          <td>{lead.createdLabel}</td>
+                          <td>
+                            <span className={`crm-status-chip status-${lead.status}`}>
+                              {getLeadStatusLabel(lead.status)}
+                            </span>
+                          </td>
+                          <td>{lead.notes}</td>
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="mobile-only admin-mobile-list">
+              {hasRealLeads
+                ? leads.map((lead) => (
+                    <article key={lead.id} className="admin-mobile-item">
+                      <div className="admin-mobile-head">
+                        <h4>{lead.name}</h4>
+                        <span className="mini-kicker">{new Date(lead.createdAt).toLocaleDateString("es-ES")}</span>
+                      </div>
+                      <p className="hint" style={{ marginBottom: "0.5rem" }}>
+                        {lead.contact} · {lead.originLanding}
+                      </p>
+                      <label>
+                        Estado
                         <select
                           className={`status-select status-${lead.status}`}
                           value={lead.status}
@@ -944,73 +1106,38 @@ export function AdminApp() {
                           <option value="in_progress">En gestión</option>
                           <option value="closed">Cerrado</option>
                         </select>
-                      </td>
-                      <td>
+                      </label>
+                      <label>
+                        Notas
                         <textarea
                           className="note-input"
                           value={getDraftNote(lead)}
                           placeholder="Notas internas"
                           onChange={(event) => setDraftNote(lead.id, event.target.value)}
                         />
-                        <button
-                          className="btn btn-ghost"
-                          style={{ marginTop: "0.45rem" }}
-                          onClick={() => void saveLeadNote(lead.id)}
-                        >
-                          Guardar nota
-                        </button>
-                      </td>
-                    </tr>
+                      </label>
+                      <button className="btn btn-ghost" onClick={() => void saveLeadNote(lead.id)}>
+                        Guardar nota
+                      </button>
+                    </article>
+                  ))
+                : CRM_DEMO_LEADS.map((lead) => (
+                    <article key={lead.id} className="admin-mobile-item crm-demo-row">
+                      <div className="admin-mobile-head">
+                        <h4>{lead.name}</h4>
+                        <span className="mini-kicker">{lead.createdLabel}</span>
+                      </div>
+                      <p className="hint" style={{ marginBottom: "0.35rem" }}>
+                        {lead.contact} · {lead.originLanding}
+                      </p>
+                      <p>
+                        <span className={`crm-status-chip status-${lead.status}`}>
+                          {getLeadStatusLabel(lead.status)}
+                        </span>
+                      </p>
+                      <p className="hint">{lead.notes}</p>
+                    </article>
                   ))}
-                  {leads.length === 0 && (
-                    <tr>
-                      <td colSpan={6}>Todavía no hay leads. Envía una consulta desde cualquiera de las landings.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-            <div className="mobile-only admin-mobile-list">
-              {leads.map((lead) => (
-                <article key={lead.id} className="admin-mobile-item">
-                  <div className="admin-mobile-head">
-                    <h4>{lead.name}</h4>
-                    <span className="mini-kicker">{new Date(lead.createdAt).toLocaleDateString("es-ES")}</span>
-                  </div>
-                  <p className="hint" style={{ marginBottom: "0.5rem" }}>
-                    {lead.contact} · {lead.originLanding}
-                  </p>
-                  <label>
-                    Estado
-                    <select
-                      className={`status-select status-${lead.status}`}
-                      value={lead.status}
-                      onChange={(event) => void updateLead(lead, event.target.value as LeadStatus)}
-                    >
-                      <option value="new">Nuevo</option>
-                      <option value="in_progress">En gestión</option>
-                      <option value="closed">Cerrado</option>
-                    </select>
-                  </label>
-                  <label>
-                    Notas
-                    <textarea
-                      className="note-input"
-                      value={getDraftNote(lead)}
-                      placeholder="Notas internas"
-                      onChange={(event) => setDraftNote(lead.id, event.target.value)}
-                    />
-                  </label>
-                  <button className="btn btn-ghost" onClick={() => void saveLeadNote(lead.id)}>
-                    Guardar nota
-                  </button>
-                </article>
-              ))}
-              {leads.length === 0 && (
-                <article className="admin-mobile-item">
-                  Todavía no hay leads. Envía una consulta desde cualquiera de las landings.
-                </article>
-              )}
             </div>
           </section>
         )}

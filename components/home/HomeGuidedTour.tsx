@@ -240,8 +240,23 @@ export function HomeGuidedTour() {
     clearHighlights();
     setIsOpen(false);
     setFocusRect(null);
-    window.requestAnimationFrame(() => {
+
+    const scrollToHomeStart = () => {
+      const header = document.querySelector(".topbar") as HTMLElement | null;
+      const introSection = document.querySelector('[data-tour-id="section-inicio"]') as HTMLElement | null;
+      const headerHeight = header ? header.getBoundingClientRect().height : 0;
+
+      if (introSection) {
+        const top = introSection.getBoundingClientRect().top + window.scrollY - headerHeight;
+        window.scrollTo({ top: Math.max(0, Math.round(top)), behavior: "auto" });
+        return;
+      }
+
       window.scrollTo({ top: 0, behavior: "auto" });
+    };
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(scrollToHomeStart);
     });
   };
 
