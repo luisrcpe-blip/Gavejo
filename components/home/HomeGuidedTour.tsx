@@ -94,6 +94,26 @@ export function HomeGuidedTour() {
   useEffect(() => {
     if (!isOpen) return;
 
+    const body = document.body;
+    const html = document.documentElement;
+    const previousBodyOverflow = body.style.overflow;
+    const previousHtmlOverflow = html.style.overflow;
+    const previousBodyTouchAction = body.style.touchAction;
+
+    body.style.overflow = "hidden";
+    html.style.overflow = "hidden";
+    body.style.touchAction = "none";
+
+    return () => {
+      body.style.overflow = previousBodyOverflow;
+      html.style.overflow = previousHtmlOverflow;
+      body.style.touchAction = previousBodyTouchAction;
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
     if (highlightedRef.current) {
       highlightedRef.current.classList.remove("tour-highlight-target");
       highlightedRef.current = null;
