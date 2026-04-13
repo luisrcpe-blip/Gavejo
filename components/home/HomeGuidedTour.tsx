@@ -87,7 +87,6 @@ export function HomeGuidedTour() {
   const [cardStyle, setCardStyle] = useState<CSSProperties>({});
   const highlightedRef = useRef<HTMLElement | null>(null);
   const cardRef = useRef<HTMLElement | null>(null);
-  const initialScrollYRef = useRef<number>(0);
 
   const activeStep = useMemo(() => TOUR_STEPS[stepIndex], [stepIndex]);
   const isLastStep = stepIndex === TOUR_STEPS.length - 1;
@@ -104,7 +103,6 @@ export function HomeGuidedTour() {
 
   useEffect(() => {
     if (!isOpen) return;
-    initialScrollYRef.current = window.scrollY;
 
     const preventDefault = (event: Event) => {
       event.preventDefault();
@@ -242,7 +240,9 @@ export function HomeGuidedTour() {
     clearHighlights();
     setIsOpen(false);
     setFocusRect(null);
-    window.scrollTo({ top: initialScrollYRef.current, behavior: "auto" });
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    });
   };
 
   const goNext = () => {
