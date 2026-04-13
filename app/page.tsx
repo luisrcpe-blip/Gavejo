@@ -3,6 +3,7 @@ import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { NeonPlaceholder } from "@/components/ui/NeonPlaceholder";
 import { PublicHeader } from "@/components/ui/PublicHeader";
 import { Reveal } from "@/components/ui/Reveal";
+import { HomeGuidedTour } from "@/components/home/HomeGuidedTour";
 import { HomePrimaryRoutes } from "@/components/home/HomePrimaryRoutes";
 
 export const dynamic = "force-dynamic";
@@ -81,7 +82,8 @@ export default function HomePage() {
     <>
       <PublicHeader />
       <main className="home-wrap">
-        <section className="section home-hero-shell" id="inicio">
+        <HomeGuidedTour />
+        <section className="section home-hero-shell" id="inicio" data-tour-id="section-inicio">
           <div className="container home-hero-grid">
             <Reveal>
               <span className="chip">Demo ejecutiva · Biomateriales avanzados</span>
@@ -147,7 +149,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="section" id="soluciones">
+        <section className="section" id="soluciones" data-tour-id="section-soluciones">
           <div className="container">
             <Reveal>
               <div className="home-section-head">
@@ -216,7 +218,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="section section-soft" id="contacto">
+        <section className="section section-soft" id="contacto" data-tour-id="section-contacto">
           <div className="container two-col">
             <Reveal>
               <p className="section-kicker">Ruta comercial</p>

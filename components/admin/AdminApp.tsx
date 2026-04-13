@@ -276,14 +276,14 @@ export function AdminApp() {
           <h1>GAVEJO</h1>
           <p>Panel de demo</p>
         </div>
-        <nav>
+        <nav className="admin-module-nav">
           {MODULES.map((item) => (
             <button
               key={item.key}
               className={`nav-btn ${active === item.key ? "is-active" : ""}`}
               onClick={() => setActive(item.key)}
             >
-              {item.label}
+              <span className="nav-label">{item.label}</span>
               {item.key === "crm" && summary.fresh > 0 && <span className="badge-pulse">{summary.fresh}</span>}
             </button>
           ))}
@@ -708,7 +708,7 @@ export function AdminApp() {
             <div className="mobile-only admin-mobile-list">
               {leads.map((lead) => (
                 <article key={lead.id} className="admin-mobile-item">
-                  <div className="row-between" style={{ marginBottom: "0.5rem" }}>
+                  <div className="admin-mobile-head">
                     <h4>{lead.name}</h4>
                     <span className="mini-kicker">{new Date(lead.createdAt).toLocaleDateString("es-ES")}</span>
                   </div>
