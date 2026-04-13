@@ -172,6 +172,10 @@ p {
     rgba(17, 24, 39, 0) 100%
   );
   border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  transition:
+    background-color var(--transition-base) var(--ease-main),
+    border-color var(--transition-base) var(--ease-main),
+    backdrop-filter var(--transition-base) var(--ease-main);
 }
 
 .topbar-overlay::after {
@@ -181,6 +185,17 @@ p {
   height: 48px;
   background: linear-gradient(180deg, rgba(17, 24, 39, 0.22) 0%, rgba(17, 24, 39, 0) 100%);
   pointer-events: none;
+  transition: opacity var(--transition-base) var(--ease-main);
+}
+
+.topbar-overlay.is-scrolled {
+  background: #44464b;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+}
+
+.topbar-overlay.is-scrolled::after {
+  opacity: 0;
 }
 
 .topbar-clean {

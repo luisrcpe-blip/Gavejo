@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type HeaderVariant = "solid" | "overlay" | "clean";
 
@@ -18,6 +19,7 @@ const NAV_LINKS = [
 
 export function PublicHeader() {
   const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
   const landingRoutes = ["/soluciones/fachadas", "/materiales/termo-tratada", "/mader-balear"];
 
   const variant: HeaderVariant =
@@ -28,8 +30,20 @@ export function PublicHeader() {
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
+  useEffect(() => {
+    if (variant !== "overlay") {
+      setScrolled(false);
+      return;
+    }
+
+    const onScroll = () => setScrolled(window.scrollY > 18);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [variant]);
+
   return (
-    <header className={`topbar topbar-${variant}`}>
+    <header className={`topbar topbar-${variant} ${scrolled ? "is-scrolled" : ""}`}>
       <div className="container topbar-inner">
         <Link href="/" className="brand-link" aria-label="Volver al inicio">
           <span className="brand-logo-shell">
