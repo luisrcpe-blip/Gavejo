@@ -13,12 +13,14 @@ const NAV_LINKS = [
   { href: "/materiales", label: "Materiales", comingSoon: true },
   { href: "/mader-balear", label: "Madera Balear", comingSoon: true },
   { href: "/blog", label: "Blog", comingSoon: true },
-  { href: "/contacto", label: "Contacto", comingSoon: true }
+  { href: "/contacto", label: "Contacto", comingSoon: true },
+  { href: "/admin", label: "Admin", comingSoon: false }
 ];
 
 export function PublicHeader() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [comingSoonToast, setComingSoonToast] = useState<{
     visible: boolean;
     top: number;
@@ -30,6 +32,7 @@ export function PublicHeader() {
     left: 0,
     above: false
   });
+
   const landingRoutes = ["/soluciones/fachadas", "/materiales/termo-tratada", "/mader-balear"];
 
   const variant: HeaderVariant =
@@ -61,11 +64,25 @@ export function PublicHeader() {
     return () => window.clearTimeout(timeout);
   }, [comingSoonToast.visible]);
 
-  const onMenuClick = (
-    event: MouseEvent<HTMLAnchorElement>,
-    item: (typeof NAV_LINKS)[number]
-  ) => {
-    if (!item.comingSoon) return;
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth > 840) setMobileOpen(false);
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const onMenuClick = (event: MouseEvent<HTMLAnchorElement>, item: (typeof NAV_LINKS)[number]) => {
+    if (!item.comingSoon) {
+      setMobileOpen(false);
+      return;
+    }
+
     event.preventDefault();
     const rect = event.currentTarget.getBoundingClientRect();
     const verticalGap = 10;
@@ -80,7 +97,11 @@ export function PublicHeader() {
   };
 
   return (
-    <header className={`topbar topbar-${variant} ${scrolled ? "is-scrolled" : ""}`}>
+    <header
+      className={`topbar topbar-${variant} ${scrolled ? "is-scrolled" : ""} ${
+        mobileOpen ? "is-mobile-open" : ""
+      }`}
+    >
       <div className="container topbar-inner">
         <Link href="/" className="brand-link" aria-label="Volver al inicio">
           <span className="brand-logo-shell">
@@ -94,6 +115,7 @@ export function PublicHeader() {
             />
           </span>
         </Link>
+
         <nav className="topnav">
           {NAV_LINKS.map((item) => (
             <Link
@@ -107,20 +129,40 @@ export function PublicHeader() {
             </Link>
           ))}
         </nav>
+
+        <button
+          type="button"
+          className={`mobile-menu-toggle ${mobileOpen ? "is-open" : ""}`}
+          onClick={() => setMobileOpen((prev) => !prev)}
+          aria-label={mobileOpen ? "Cerrar menu" : "Abrir menu"}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-menu-panel"
+        >
+          <span className="sr-only">{mobileOpen ? "Cerrar menu" : "Abrir menu"}</span>
+          <span className="mobile-menu-bars" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </span>
+        </button>
       </div>
-      <nav className="container mobile-topnav" aria-label="Navegacion movil">
-        {NAV_LINKS.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={isActive(item.href) ? "is-active" : ""}
-            onClick={(event) => onMenuClick(event, item)}
-            aria-disabled={item.comingSoon ? "true" : undefined}
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
+
+      <div id="mobile-menu-panel" className={`mobile-menu-panel ${mobileOpen ? "is-open" : ""}`}>
+        <nav className="container mobile-menu-nav" aria-label="Navegacion movil">
+          {NAV_LINKS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={isActive(item.href) ? "is-active" : ""}
+              onClick={(event) => onMenuClick(event, item)}
+              aria-disabled={item.comingSoon ? "true" : undefined}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+
       <div
         className={`coming-soon-toast ${comingSoonToast.visible ? "is-visible" : ""} ${
           comingSoonToast.above ? "is-above" : ""
@@ -130,7 +172,7 @@ export function PublicHeader() {
         aria-live="polite"
       >
         <span className="coming-soon-dot" />
-        <span>¡Próximamente!</span>
+        <span>{"\u00a1Pr\u00f3ximamente!"}</span>
       </div>
     </header>
   );

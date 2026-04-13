@@ -3,6 +3,7 @@ import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { NeonPlaceholder } from "@/components/ui/NeonPlaceholder";
 import { PublicHeader } from "@/components/ui/PublicHeader";
 import { Reveal } from "@/components/ui/Reveal";
+import { HomePrimaryRoutes } from "@/components/home/HomePrimaryRoutes";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -90,17 +91,7 @@ export default function HomePage() {
                 especializadas, flujo de captación demostrable y panel de administración listo para
                 gestionar consultas en tiempo real.
               </p>
-              <div className="hero-actions">
-                <Link href="/soluciones/fachadas" className="btn btn-primary">
-                  Ver página de Fachadas
-                </Link>
-                <Link href="/materiales/termo-tratada" className="btn btn-secondary">
-                  Ver página de Madera termotratada
-                </Link>
-                <Link href="/admin" className="btn btn-ghost">
-                  Abrir panel de administración
-                </Link>
-              </div>
+              <HomePrimaryRoutes />
               <div className="home-mini-points">
                 <div className="home-mini-point">
                   <strong>Arquitectura</strong>
