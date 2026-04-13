@@ -87,6 +87,7 @@ export function HomeGuidedTour() {
   const [cardStyle, setCardStyle] = useState<CSSProperties>({});
   const highlightedRef = useRef<HTMLElement | null>(null);
   const cardRef = useRef<HTMLElement | null>(null);
+  const mobileAdjustedStepRef = useRef<number | null>(null);
 
   const activeStep = useMemo(() => TOUR_STEPS[stepIndex], [stepIndex]);
   const isLastStep = stepIndex === TOUR_STEPS.length - 1;
@@ -129,26 +130,41 @@ export function HomeGuidedTour() {
   useEffect(() => {
     if (!isOpen) return;
 
+    mobileAdjustedStepRef.current = null;
     clearHighlights();
 
     const target = findTarget(activeStep.targets) as HTMLElement | null;
     if (target) {
       highlightedRef.current = target;
       target.classList.add("tour-highlight-target");
-      target.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
+      if (window.innerWidth > 840) {
+        target.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
+      }
     }
 
     const computeLayout = () => {
-      const margin = 16;
+      const isMobile = window.innerWidth <= 840;
+      const margin = isMobile ? 10 : 16;
       const vw = window.innerWidth;
       const vh = window.innerHeight;
 
       const cardEl = cardRef.current;
-      const cardWidth = Math.min(Math.max((cardEl?.offsetWidth ?? 520), 320), vw - margin * 2);
+      const cardWidth = isMobile
+        ? Math.max(260, vw - margin * 2)
+        : Math.min(Math.max(cardEl?.offsetWidth ?? 520, 320), vw - margin * 2);
       const cardHeight = cardEl?.offsetHeight ?? 260;
 
       if (!target) {
         setFocusRect(null);
+        if (isMobile) {
+          const mobileTop = Math.round(Math.max(margin, vh - cardHeight - margin));
+          setCardStyle({
+            left: `${margin}px`,
+            top: `${mobileTop}px`,
+            width: `${Math.round(cardWidth)}px`
+          });
+          return;
+        }
         setCardStyle({
           left: `${Math.round((vw - cardWidth) / 2)}px`,
           top: `${Math.round((vh - cardHeight) / 2)}px`
@@ -157,6 +173,25 @@ export function HomeGuidedTour() {
       }
 
       const rect = target.getBoundingClientRect();
+
+      if (isMobile && mobileAdjustedStepRef.current !== stepIndex) {
+        const mobileHeaderGuard = 76;
+        const cardTop = Math.max(margin, vh - cardHeight - margin);
+        const mobileBottomGuard = cardTop - 14;
+        const isOutOfView = rect.top < mobileHeaderGuard || rect.bottom > mobileBottomGuard;
+
+        if (isOutOfView) {
+          const delta =
+            rect.top < mobileHeaderGuard ? rect.top - mobileHeaderGuard : rect.bottom - mobileBottomGuard;
+          window.scrollTo({
+            top: Math.max(0, Math.round(window.scrollY + delta)),
+            behavior: "auto"
+          });
+          mobileAdjustedStepRef.current = stepIndex;
+          return;
+        }
+      }
+
       const pad = 10;
       const left = clamp(rect.left - pad, margin, vw - margin);
       const top = clamp(rect.top - pad, margin, vh - margin);
@@ -173,6 +208,16 @@ export function HomeGuidedTour() {
         height: Math.round(height),
         radius: 14
       });
+
+      if (isMobile) {
+        const mobileTop = Math.round(Math.max(margin, vh - cardHeight - margin));
+        setCardStyle({
+          left: `${margin}px`,
+          top: `${mobileTop}px`,
+          width: `${Math.round(cardWidth)}px`
+        });
+        return;
+      }
 
       if (isLargeTarget) {
         setCardStyle({
@@ -228,7 +273,7 @@ export function HomeGuidedTour() {
       window.removeEventListener("scroll", computeLayout);
       clearHighlights();
     };
-  }, [activeStep, clearHighlights, isOpen]);
+  }, [activeStep, clearHighlights, isOpen, stepIndex]);
 
   useEffect(() => {
     return () => {

@@ -2453,6 +2453,11 @@ p {
     display: none;
   }
 
+  .guided-tour-card {
+    max-height: calc(100vh - 1.1rem);
+    overflow: auto;
+  }
+
   .admin-card {
     padding: 0.88rem;
   }
