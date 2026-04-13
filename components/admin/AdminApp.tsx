@@ -156,6 +156,23 @@ export function AdminApp() {
     return { total, fresh, progress, closed };
   }, [leads]);
 
+  const closeRate = useMemo(() => {
+    if (summary.total === 0) return 0;
+    return Math.round((summary.closed / summary.total) * 100);
+  }, [summary.closed, summary.total]);
+
+  const latestLeads = useMemo(() => {
+    return [...leads]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, 5);
+  }, [leads]);
+
+  const frequentEvents = useMemo(() => {
+    return Object.entries(eventBreakdown)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 4);
+  }, [eventBreakdown]);
+
   useEffect(() => {
     setNoteDrafts((prev) => {
       const next = { ...prev };
@@ -344,57 +361,115 @@ export function AdminApp() {
         </p>
 
         {active === "dashboard" && (
-          <section className="admin-grid">
-            <article className="admin-card metric">
-              <p>Leads totales</p>
-              <strong>{summary.total}</strong>
-            </article>
-            <article className="admin-card metric">
-              <p>Nuevos</p>
-              <strong>{summary.fresh}</strong>
-            </article>
-            <article className="admin-card metric">
-              <p>En gestión</p>
-              <strong>{summary.progress}</strong>
-            </article>
-            <article className="admin-card metric">
-              <p>Cerrados</p>
-              <strong>{summary.closed}</strong>
-            </article>
-            <article className="admin-card">
-              <h3>Actividad analítica</h3>
-              <p>Eventos totales: {eventsCount}</p>
-              <ul className="mini-list">
-                <li>
-                  <strong>Clicks en CTA</strong>
-                  <span>{eventBreakdown.cta_click ?? 0}</span>
-                </li>
-                <li>
-                  <strong>Clicks en WhatsApp</strong>
-                  <span>{eventBreakdown.whatsapp_click ?? 0}</span>
-                </li>
-                <li>
-                  <strong>Envíos de formulario</strong>
-                  <span>{eventBreakdown.form_submit ?? 0}</span>
-                </li>
-                <li>
-                  <strong>Cambio de estado</strong>
-                  <span>{eventBreakdown.lead_status_change ?? 0}</span>
-                </li>
-              </ul>
-            </article>
-            <article className="admin-card">
-              <h3>Leads recientes</h3>
-              <ul className="mini-list">
-                {leads.slice(0, 5).map((lead) => (
-                  <li key={lead.id}>
-                    <strong>{lead.name}</strong>
-                    <span>{lead.originLanding}</span>
-                  </li>
-                ))}
-                {leads.length === 0 && <li>No hay leads aún. Envía un formulario desde una landing.</li>}
-              </ul>
-            </article>
+          <section className="admin-dashboard-v2">
+            <div className="admin-dashboard-head">
+              <div>
+                <p className="mini-kicker">Vista ejecutiva</p>
+                <h3>Tablero comercial y operativo</h3>
+              </div>
+              <div className="admin-dashboard-search">
+                <span aria-hidden="true">⌕</span>
+                <input value="Seguimiento de leads y conversiones" readOnly />
+              </div>
+            </div>
+
+            <div className="admin-dashboard-layout">
+              <div className="admin-dashboard-main-col">
+                <div className="admin-dashboard-cards">
+                  <article className="admin-insight-card admin-insight-card-indigo">
+                    <p>Pipeline total</p>
+                    <strong>{summary.total}</strong>
+                    <span>Consultas acumuladas en la demo</span>
+                  </article>
+                  <article className="admin-insight-card admin-insight-card-cyan">
+                    <p>Leads en gestión</p>
+                    <strong>{summary.progress}</strong>
+                    <span>Seguimientos activos del equipo</span>
+                  </article>
+                  <article className="admin-insight-card admin-insight-card-violet">
+                    <p>Conversión cerrada</p>
+                    <strong>{closeRate}%</strong>
+                    <span>Porcentaje de leads cerrados</span>
+                  </article>
+                </div>
+
+                <div className="admin-kpi-row-v2">
+                  <article className="admin-kpi-chip">
+                    <p>Nuevos</p>
+                    <strong>{summary.fresh}</strong>
+                  </article>
+                  <article className="admin-kpi-chip">
+                    <p>Cerrados</p>
+                    <strong>{summary.closed}</strong>
+                  </article>
+                  <article className="admin-kpi-chip">
+                    <p>Eventos</p>
+                    <strong>{eventsCount}</strong>
+                  </article>
+                  <article className="admin-kpi-chip">
+                    <p>Blog publicado</p>
+                    <strong>{blogPosts.filter((post) => post.status === "published").length}</strong>
+                  </article>
+                </div>
+
+                <article className="admin-card admin-activity-card">
+                  <div className="row-between">
+                    <h3>Actividad reciente</h3>
+                    <span className="mini-kicker">Últimos registros</span>
+                  </div>
+                  <ul className="admin-activity-list">
+                    {latestLeads.map((lead) => (
+                      <li key={lead.id}>
+                        <span className={`admin-status-dot status-${lead.status}`} />
+                        <div>
+                          <strong>{lead.name}</strong>
+                          <p>
+                            {lead.originLanding} · {new Date(lead.createdAt).toLocaleString("es-ES")}
+                          </p>
+                        </div>
+                        <span className="admin-amount-tag">{lead.contact}</span>
+                      </li>
+                    ))}
+                    {latestLeads.length === 0 && (
+                      <li className="admin-empty-row">
+                        Aún no hay actividad. Envía un formulario desde cualquier landing.
+                      </li>
+                    )}
+                  </ul>
+                </article>
+              </div>
+
+              <aside className="admin-dashboard-side-col">
+                <article className="admin-card admin-contacts-card">
+                  <h3>Equipo de atención</h3>
+                  <p className="hint">Responsables sugeridos para seguimiento de consultas prioritarias.</p>
+                  <ul className="admin-avatar-list">
+                    {["Carlos", "Valeria", "Irene", "Marco"].map((name) => (
+                      <li key={name}>
+                        <span>{name.slice(0, 1)}</span>
+                        <small>{name}</small>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+
+                <article className="admin-card admin-events-card">
+                  <h3>Señales de conversión</h3>
+                  <ul className="mini-list">
+                    {frequentEvents.length > 0 ? (
+                      frequentEvents.map(([eventName, total]) => (
+                        <li key={eventName}>
+                          <strong>{eventName.replaceAll("_", " ")}</strong>
+                          <span>{total}</span>
+                        </li>
+                      ))
+                    ) : (
+                      <li>Sin eventos todavía. Interactúa con la home o las landings para generarlos.</li>
+                    )}
+                  </ul>
+                </article>
+              </aside>
+            </div>
           </section>
         )}
 
