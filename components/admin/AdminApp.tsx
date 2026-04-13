@@ -49,17 +49,98 @@ const MODULES: Array<{
   key: AdminModule;
   label: string;
   mobileLabel?: string;
-  icon: string;
   enabled: boolean;
 }> = [
-  { key: "dashboard", label: "Panel", icon: "PN", enabled: false },
-  { key: "pages", label: "Páginas", icon: "PG", enabled: false },
-  { key: "landings", label: "Landings", icon: "LD", enabled: false },
-  { key: "blog", label: "Blog", icon: "BL", enabled: false },
-  { key: "media", label: "Medios", icon: "MD", enabled: false },
-  { key: "crm", label: "CRM de leads", mobileLabel: "CRM", icon: "CR", enabled: true },
-  { key: "settings", label: "Ajustes", icon: "AJ", enabled: false }
+  { key: "dashboard", label: "Panel", enabled: false },
+  { key: "pages", label: "Páginas", enabled: false },
+  { key: "landings", label: "Landings", enabled: false },
+  { key: "blog", label: "Blog", enabled: false },
+  { key: "media", label: "Medios", enabled: false },
+  { key: "crm", label: "CRM de leads", mobileLabel: "CRM", enabled: true },
+  { key: "settings", label: "Ajustes", enabled: false }
 ];
+
+function ModuleIcon({ module }: { module: AdminModule }) {
+  if (module === "dashboard") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="1.8" />
+        <rect x="13" y="3" width="8" height="5" rx="2" stroke="currentColor" strokeWidth="1.8" />
+        <rect x="13" y="10" width="8" height="11" rx="2" stroke="currentColor" strokeWidth="1.8" />
+        <rect x="3" y="13" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="1.8" />
+      </svg>
+    );
+  }
+
+  if (module === "pages") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M7 3h7l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinejoin="round"
+        />
+        <path d="M14 3v4h4M9 12h6M9 16h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (module === "landings") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="4" y="4" width="16" height="12" rx="2.2" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M4 9h16M9 16v4M15 16v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (module === "blog") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M5 19h14M7 16l9.6-9.6a1.8 1.8 0 0 1 2.5 0l.5.5a1.8 1.8 0 0 1 0 2.5L10 19H7v-3Z"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  if (module === "media") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="14" rx="2.2" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="9" cy="10" r="2" stroke="currentColor" strokeWidth="1.8" />
+        <path d="m5 17 4-4 3 3 2-2 5 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (module === "crm") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="9" cy="9" r="3" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 7h5M18.5 4.5v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V20a2 2 0 0 1-4 0v-.2a1 1 0 0 0-.6-.9 1 1 0 0 0-1.1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H4a2 2 0 0 1 0-4h.2a1 1 0 0 0 .9-.6 1 1 0 0 0-.2-1.1l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1a1 1 0 0 0 1.1.2 1 1 0 0 0 .6-.9V4a2 2 0 0 1 4 0v.2a1 1 0 0 0 .6.9 1 1 0 0 0 1.1-.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1 1 0 0 0-.2 1.1 1 1 0 0 0 .9.6H20a2 2 0 0 1 0 4h-.2a1 1 0 0 0-.9.6Z"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 export function AdminApp() {
   const [active, setActive] = useState<AdminModule>("crm");
@@ -379,7 +460,7 @@ export function AdminApp() {
               aria-disabled={!item.enabled}
             >
               <span className="nav-icon" aria-hidden="true">
-                {item.icon}
+                <ModuleIcon module={item.key} />
               </span>
               <span className="nav-label nav-label-desktop">{item.label}</span>
               <span className="nav-label nav-label-mobile">{item.mobileLabel ?? item.label}</span>
@@ -387,6 +468,16 @@ export function AdminApp() {
             </button>
           ))}
         </nav>
+        <button type="button" className="admin-profile-btn" aria-label="Perfil administrador">
+          <span className="admin-profile-avatar">A</span>
+          <span className="admin-profile-copy">
+            <strong>Admin</strong>
+            <small>Cuenta principal</small>
+          </span>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className="admin-profile-arrow">
+            <path d="m7 5 5 5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          </svg>
+        </button>
         <div
           className={`coming-soon-toast ${comingSoonToast.visible ? "is-visible" : ""} ${
             comingSoonToast.above ? "is-above" : ""
