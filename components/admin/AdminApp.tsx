@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useState } from "react";
 import {
   getAnalyticsEvents,
   subscribeEvents,
@@ -45,18 +45,24 @@ import {
 
 type AdminModule = "dashboard" | "pages" | "landings" | "blog" | "media" | "crm" | "settings";
 
-const MODULES: Array<{ key: AdminModule; label: string; mobileLabel?: string; icon: string }> = [
-  { key: "dashboard", label: "Panel", icon: "PN" },
-  { key: "pages", label: "Páginas", icon: "PG" },
-  { key: "landings", label: "Landings", icon: "LD" },
-  { key: "blog", label: "Blog", icon: "BL" },
-  { key: "media", label: "Medios", icon: "MD" },
-  { key: "crm", label: "CRM de leads", mobileLabel: "CRM", icon: "CR" },
-  { key: "settings", label: "Ajustes", icon: "AJ" }
+const MODULES: Array<{
+  key: AdminModule;
+  label: string;
+  mobileLabel?: string;
+  icon: string;
+  enabled: boolean;
+}> = [
+  { key: "dashboard", label: "Panel", icon: "PN", enabled: false },
+  { key: "pages", label: "Páginas", icon: "PG", enabled: false },
+  { key: "landings", label: "Landings", icon: "LD", enabled: false },
+  { key: "blog", label: "Blog", icon: "BL", enabled: false },
+  { key: "media", label: "Medios", icon: "MD", enabled: false },
+  { key: "crm", label: "CRM de leads", mobileLabel: "CRM", icon: "CR", enabled: true },
+  { key: "settings", label: "Ajustes", icon: "AJ", enabled: false }
 ];
 
 export function AdminApp() {
-  const [active, setActive] = useState<AdminModule>("dashboard");
+  const [active, setActive] = useState<AdminModule>("crm");
   const [menuOpenMobile, setMenuOpenMobile] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [settings, setSettings] = useState<DemoSettings>(getDemoSettings());
@@ -75,6 +81,17 @@ export function AdminApp() {
   const [landingsError, setLandingsError] = useState<string | null>(null);
   const [blogError, setBlogError] = useState<string | null>(null);
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
+  const [comingSoonToast, setComingSoonToast] = useState<{
+    visible: boolean;
+    top: number;
+    left: number;
+    above: boolean;
+  }>({
+    visible: false,
+    top: 0,
+    left: 0,
+    above: false
+  });
   const [blogEditor, setBlogEditor] = useState<{
     id?: string;
     title: string;
@@ -193,6 +210,15 @@ export function AdminApp() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  useEffect(() => {
+    if (!comingSoonToast.visible) return;
+    const timeout = window.setTimeout(
+      () => setComingSoonToast((prev) => ({ ...prev, visible: false })),
+      2200
+    );
+    return () => window.clearTimeout(timeout);
+  }, [comingSoonToast.visible]);
+
   const exportCsv = () => {
     const csv = leadsToCsv(leads);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -295,6 +321,28 @@ export function AdminApp() {
     }
   };
 
+  const handleModuleClick = (
+    event: MouseEvent<HTMLButtonElement>,
+    item: (typeof MODULES)[number]
+  ) => {
+    if (!item.enabled) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const verticalGap = 10;
+      const preferAbove = rect.top > window.innerHeight * 0.68;
+
+      setComingSoonToast({
+        visible: true,
+        left: rect.left + rect.width / 2,
+        top: preferAbove ? rect.top - verticalGap : rect.bottom + verticalGap,
+        above: preferAbove
+      });
+      return;
+    }
+
+    setActive(item.key);
+    setMenuOpenMobile(false);
+  };
+
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
@@ -324,11 +372,11 @@ export function AdminApp() {
           {MODULES.map((item) => (
             <button
               key={item.key}
-              className={`nav-btn ${active === item.key ? "is-active" : ""}`}
-              onClick={() => {
-                setActive(item.key);
-                setMenuOpenMobile(false);
-              }}
+              className={`nav-btn ${active === item.key ? "is-active" : ""} ${
+                item.enabled ? "" : "is-disabled"
+              }`}
+              onClick={(event) => handleModuleClick(event, item)}
+              aria-disabled={!item.enabled}
             >
               <span className="nav-icon" aria-hidden="true">
                 {item.icon}
@@ -339,6 +387,17 @@ export function AdminApp() {
             </button>
           ))}
         </nav>
+        <div
+          className={`coming-soon-toast ${comingSoonToast.visible ? "is-visible" : ""} ${
+            comingSoonToast.above ? "is-above" : ""
+          }`}
+          style={{ left: `${comingSoonToast.left}px`, top: `${comingSoonToast.top}px` }}
+          role="status"
+          aria-live="polite"
+        >
+          <span className="coming-soon-dot" />
+          <span>{"\u00a1Pr\u00f3ximamente!"}</span>
+        </div>
       </aside>
 
       <main className="admin-main">
@@ -356,8 +415,8 @@ export function AdminApp() {
         </header>
 
         <p className="hint admin-intro-hint">
-          Operativo en demo: CRM, Blog, Landings y Ajustes con persistencia MySQL. Preparado para fase
-          productiva: autenticación avanzada y gestor de medios completo.
+          Operativo en demo: CRM de leads con persistencia MySQL. Los módulos Panel, Páginas, Landings,
+          Blog, Medios y Ajustes están en modo Próximamente.
         </p>
 
         {active === "dashboard" && (
