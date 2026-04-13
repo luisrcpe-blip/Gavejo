@@ -137,9 +137,27 @@ export function HomeGuidedTour() {
     if (target) {
       highlightedRef.current = target;
       target.classList.add("tour-highlight-target");
-      if (window.innerWidth > 840) {
-        target.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
-      }
+
+      // Keep the target inside a safe viewport zone so the sticky header never covers it.
+      const alignTargetToSafeViewport = () => {
+        const header = document.querySelector(".topbar") as HTMLElement | null;
+        const headerHeight = header ? header.getBoundingClientRect().height : 0;
+        const topGuard = headerHeight + 14;
+        const bottomGuard = window.innerWidth <= 840 ? 16 : 24;
+        const viewportBottom = window.innerHeight - bottomGuard;
+        const rect = target.getBoundingClientRect();
+        const isOutOfView = rect.top < topGuard || rect.bottom > viewportBottom;
+
+        if (!isOutOfView) return;
+
+        const delta = rect.top < topGuard ? rect.top - topGuard : rect.bottom - viewportBottom;
+        window.scrollTo({
+          top: Math.max(0, Math.round(window.scrollY + delta)),
+          behavior: "auto"
+        });
+      };
+
+      alignTargetToSafeViewport();
     }
 
     const computeLayout = () => {
@@ -175,7 +193,9 @@ export function HomeGuidedTour() {
       const rect = target.getBoundingClientRect();
 
       if (isMobile && mobileAdjustedStepRef.current !== stepIndex) {
-        const mobileHeaderGuard = 76;
+        const header = document.querySelector(".topbar") as HTMLElement | null;
+        const headerHeight = header ? header.getBoundingClientRect().height : 0;
+        const mobileHeaderGuard = headerHeight + 10;
         const cardTop = Math.max(margin, vh - cardHeight - margin);
         const mobileBottomGuard = cardTop - 14;
         const isOutOfView = rect.top < mobileHeaderGuard || rect.bottom > mobileBottomGuard;
