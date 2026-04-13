@@ -22,10 +22,10 @@ export default function BlogPage() {
     <>
       <PublicHeader />
       <main className="container section">
-        <span className="chip">Blog tecnico</span>
+        <span className="chip">Blog técnico</span>
         <h1>Conocimiento aplicado en madera y sistemas</h1>
         <p className="lead-text home-lead">
-          Este bloque se alimenta desde el panel admin. Todo post publicado aparece automaticamente aqui.
+          Este bloque se alimenta desde el panel de administración. Toda publicación aparece automáticamente aquí.
         </p>
 
         <div className="grid grid-3">
@@ -36,16 +36,16 @@ export default function BlogPage() {
               <p className="blog-excerpt">{post.excerpt}</p>
               <p className="lead-text blog-post-content">{post.content}</p>
               <Link href="/contacto" className="btn btn-ghost" style={{ marginTop: "0.7rem" }}>
-                Solicitar informacion
+                Solicitar información
               </Link>
             </article>
           ))}
           {published.length === 0 && (
             <article className="card card-pad">
               <h3>Sin publicaciones activas</h3>
-              <p className="lead-text">Publica una entrada desde el panel admin para mostrarla aqui.</p>
+              <p className="lead-text">Publica una entrada desde el panel de administración para mostrarla aquí.</p>
               <Link href="/admin" className="btn btn-primary" style={{ marginTop: "0.8rem" }}>
-                Ir al panel
+                Ir al panel de administración
               </Link>
             </article>
           )}

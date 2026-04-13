@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -46,12 +46,12 @@ import {
 type AdminModule = "dashboard" | "pages" | "landings" | "blog" | "media" | "crm" | "settings";
 
 const MODULES: Array<{ key: AdminModule; label: string }> = [
-  { key: "dashboard", label: "Dashboard" },
-  { key: "pages", label: "Paginas" },
+  { key: "dashboard", label: "Panel" },
+  { key: "pages", label: "Páginas" },
   { key: "landings", label: "Landings" },
   { key: "blog", label: "Blog" },
   { key: "media", label: "Medios" },
-  { key: "crm", label: "CRM Leads" },
+  { key: "crm", label: "CRM de leads" },
   { key: "settings", label: "Ajustes" }
 ];
 
@@ -191,7 +191,7 @@ export function AdminApp() {
       setSaveState("saved");
       setTimeout(() => setSaveState("idle"), 1600);
     } catch {
-      setSettingsError("No se pudieron guardar ajustes en MySQL. Revisa conexion DB_*.");
+      setSettingsError("No se pudieron guardar los ajustes en MySQL. Revisa la conexión DB_*.");
     }
   };
 
@@ -202,7 +202,7 @@ export function AdminApp() {
       setPageSaveState("saved");
       setTimeout(() => setPageSaveState("idle"), 1600);
     } catch {
-      setPagesError("No se pudieron guardar paginas/SEO en MySQL.");
+      setPagesError("No se pudieron guardar las páginas y el SEO en MySQL.");
     }
   };
 
@@ -274,7 +274,7 @@ export function AdminApp() {
       <aside className="admin-sidebar">
         <div className="admin-brand">
           <h1>GAVEJO</h1>
-          <p>Panel Demo</p>
+          <p>Panel de demo</p>
         </div>
         <nav>
           {MODULES.map((item) => (
@@ -293,14 +293,14 @@ export function AdminApp() {
       <main className="admin-main">
         <header className="admin-top">
           <div>
-            <h2>Panel de administracion</h2>
-            <p>Demo funcional para validacion comercial y operativa.</p>
+            <h2>Panel de administración</h2>
+            <p>Demo funcional para validación comercial y operativa.</p>
           </div>
         </header>
 
         <p className="hint" style={{ marginBottom: "0.9rem" }}>
           Operativo en demo: CRM, Blog, Landings y Ajustes con persistencia MySQL. Preparado para fase
-          productiva: auth avanzada y media manager completo.
+          productiva: autenticación avanzada y gestor de medios completo.
         </p>
 
         {active === "dashboard" && (
@@ -314,7 +314,7 @@ export function AdminApp() {
               <strong>{summary.fresh}</strong>
             </article>
             <article className="admin-card metric">
-              <p>En gestion</p>
+              <p>En gestión</p>
               <strong>{summary.progress}</strong>
             </article>
             <article className="admin-card metric">
@@ -322,23 +322,23 @@ export function AdminApp() {
               <strong>{summary.closed}</strong>
             </article>
             <article className="admin-card">
-              <h3>Actividad analitica</h3>
+              <h3>Actividad analítica</h3>
               <p>Eventos totales: {eventsCount}</p>
               <ul className="mini-list">
                 <li>
-                  <strong>CTA clicks</strong>
+                  <strong>Clicks en CTA</strong>
                   <span>{eventBreakdown.cta_click ?? 0}</span>
                 </li>
                 <li>
-                  <strong>WhatsApp clicks</strong>
+                  <strong>Clicks en WhatsApp</strong>
                   <span>{eventBreakdown.whatsapp_click ?? 0}</span>
                 </li>
                 <li>
-                  <strong>Form submits</strong>
+                  <strong>Envíos de formulario</strong>
                   <span>{eventBreakdown.form_submit ?? 0}</span>
                 </li>
                 <li>
-                  <strong>Cambio estado</strong>
+                  <strong>Cambio de estado</strong>
                   <span>{eventBreakdown.lead_status_change ?? 0}</span>
                 </li>
               </ul>
@@ -352,7 +352,7 @@ export function AdminApp() {
                     <span>{lead.originLanding}</span>
                   </li>
                 ))}
-                {leads.length === 0 && <li>No hay leads aun. Envia un formulario desde una landing.</li>}
+                {leads.length === 0 && <li>No hay leads aún. Envía un formulario desde una landing.</li>}
               </ul>
             </article>
           </section>
@@ -361,7 +361,7 @@ export function AdminApp() {
         {active === "pages" && (
           <section className="admin-card">
             <div className="row-between">
-              <h3>Paginas y SEO base</h3>
+              <h3>Páginas y SEO base</h3>
               <button className="btn btn-primary" onClick={() => void savePagesAction()}>
                 Guardar cambios
               </button>
@@ -370,10 +370,10 @@ export function AdminApp() {
               <table className="table">
                 <thead>
                   <tr>
-                    <th>Pagina</th>
+                    <th>Página</th>
                     <th>Ruta</th>
                     <th>H1</th>
-                    <th>SEO title</th>
+                    <th>Título SEO</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -430,7 +430,7 @@ export function AdminApp() {
                     />
                   </label>
                   <label>
-                    SEO title
+                    Título SEO
                     <input
                       className="input-field"
                       value={page.seoTitle}
@@ -446,7 +446,7 @@ export function AdminApp() {
                 </article>
               ))}
             </div>
-            {pageSaveState === "saved" && <p className="saved-pill">Paginas guardadas.</p>}
+            {pageSaveState === "saved" && <p className="saved-pill">Páginas guardadas.</p>}
             {pagesError && <p className="form-feedback error">{pagesError}</p>}
           </section>
         )}
@@ -477,7 +477,7 @@ export function AdminApp() {
                     Landing activa
                   </label>
                   <label>
-                    Hero titulo
+                    Título del hero
                     <input
                       className="input-field"
                       value={landingOverrides[slug]?.heroTitle ?? ""}
@@ -490,7 +490,7 @@ export function AdminApp() {
                     />
                   </label>
                   <label>
-                    Hero descripcion
+                    Descripción del hero
                     <textarea
                       className="input-field textarea"
                       value={landingOverrides[slug]?.heroDescription ?? ""}
@@ -503,7 +503,7 @@ export function AdminApp() {
                     />
                   </label>
                   <label>
-                    Hero referencia media
+                    Referencia de media del hero
                     <input
                       className="input-field"
                       value={landingOverrides[slug]?.heroImage ?? ""}
@@ -539,7 +539,7 @@ export function AdminApp() {
         {active === "blog" && (
           <section className="admin-card">
             <div className="row-between">
-              <h3>Blog / Editor simple</h3>
+              <h3>Blog / Editor sencillo</h3>
               <button
                 className="btn btn-ghost"
                 onClick={() => setBlogEditor({ title: "", excerpt: "", content: "", status: "draft" })}
@@ -550,7 +550,7 @@ export function AdminApp() {
             <div className="two-col">
               <div>
                 <label>
-                  Titulo
+                  Título
                   <input
                     className="input-field"
                     value={blogEditor.title}
@@ -601,7 +601,7 @@ export function AdminApp() {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th>Titulo</th>
+                      <th>Título</th>
                       <th>Estado</th>
                       <th>Editar</th>
                     </tr>
@@ -623,7 +623,7 @@ export function AdminApp() {
               </div>
             </div>
             <p className="hint" style={{ marginTop: "0.8rem" }}>
-              Las entradas publicadas aparecen automaticamente en la ruta <strong>/blog</strong>.
+              Las entradas publicadas aparecen automáticamente en la ruta <strong>/blog</strong>.
             </p>
           </section>
         )}
@@ -631,12 +631,12 @@ export function AdminApp() {
         {active === "media" && (
           <section className="admin-card">
             <h3>Biblioteca de medios</h3>
-            <p className="hint">Subida y gestion visual preparada para demo. Soporta imagenes y video.</p>
+            <p className="hint">Subida y gestión visual preparada para demo. Soporta imágenes y video.</p>
             <div className="media-grid">
               <div className="media-placeholder">Hero Fachadas (16:9)</div>
               <div className="media-placeholder">Aplicaciones (1:1)</div>
               <div className="media-placeholder">Materiales (4:3)</div>
-              <div className="media-placeholder">Galeria (4:3)</div>
+              <div className="media-placeholder">Galería (4:3)</div>
             </div>
           </section>
         )}
@@ -676,7 +676,7 @@ export function AdminApp() {
                           onChange={(event) => void updateLead(lead, event.target.value as LeadStatus)}
                         >
                           <option value="new">Nuevo</option>
-                          <option value="in_progress">En gestion</option>
+                          <option value="in_progress">En gestión</option>
                           <option value="closed">Cerrado</option>
                         </select>
                       </td>
@@ -699,7 +699,7 @@ export function AdminApp() {
                   ))}
                   {leads.length === 0 && (
                     <tr>
-                      <td colSpan={6}>Todavia no hay leads. Envia una consulta desde cualquiera de las landings.</td>
+                      <td colSpan={6}>Todavía no hay leads. Envía una consulta desde cualquiera de las landings.</td>
                     </tr>
                   )}
                 </tbody>
@@ -723,7 +723,7 @@ export function AdminApp() {
                       onChange={(event) => void updateLead(lead, event.target.value as LeadStatus)}
                     >
                       <option value="new">Nuevo</option>
-                      <option value="in_progress">En gestion</option>
+                      <option value="in_progress">En gestión</option>
                       <option value="closed">Cerrado</option>
                     </select>
                   </label>
@@ -743,7 +743,7 @@ export function AdminApp() {
               ))}
               {leads.length === 0 && (
                 <article className="admin-mobile-item">
-                  Todavia no hay leads. Envia una consulta desde cualquiera de las landings.
+                  Todavía no hay leads. Envía una consulta desde cualquiera de las landings.
                 </article>
               )}
             </div>
@@ -755,7 +755,7 @@ export function AdminApp() {
             <h3>Ajustes globales</h3>
             <div className="settings-grid">
               <label>
-                Numero de WhatsApp
+                Número de WhatsApp
                 <input
                   className="input-field"
                   value={settings.whatsappNumber}
@@ -763,7 +763,7 @@ export function AdminApp() {
                 />
               </label>
               <label>
-                Email de notificacion
+                Email de notificación
                 <input
                   className="input-field"
                   value={settings.notifyEmail}
@@ -790,8 +790,8 @@ export function AdminApp() {
                     }))
                   }
                 >
-                  <option value="default">Default</option>
-                  <option value="clean">Clean</option>
+                  <option value="default">Predeterminado</option>
+                  <option value="clean">Limpio</option>
                   <option value="editorial">Editorial</option>
                 </select>
               </label>
@@ -827,3 +827,4 @@ export function AdminApp() {
     </div>
   );
 }
+

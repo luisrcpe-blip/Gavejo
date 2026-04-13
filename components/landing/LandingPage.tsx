@@ -20,6 +20,28 @@ type LandingPageProps = {
   config: LandingConfig;
 };
 
+function toSpanishVisibleText(value: string) {
+  return value
+    .replace(/\bcontract\b/gi, "proyectos profesionales")
+    .replace(/\bContract\b/g, "Proyectos profesionales")
+    .replace(/\bdeck\b/gi, "terrazas")
+    .replace(/\bDeck\b/g, "Terrazas")
+    .replace(/\bDecking\b/g, "Terrazas")
+    .replace(/\bcladding\b/gi, "revestimiento")
+    .replace(/\bCladding\b/g, "Revestimiento")
+    .replace(/\bPlywood\b/g, "contrachapado")
+    .replace(/\bThermoWood\b/g, "madera termotratada")
+    .replace(/\bBurned Wood\b/g, "madera quemada")
+    .replace(/\bPine\b/g, "pino")
+    .replace(/\bAsh\b/g, "fresno")
+    .replace(/\bOak\b/g, "roble")
+    .replace(/\bhero\b/gi, "portada")
+    .replace(/\bHero\b/g, "Portada")
+    .replace(/\bVisual hero\b/g, "Imagen principal")
+    .replace(/\bDashboard\b/g, "Panel")
+    .replace(/\bLead\b/g, "Consulta");
+}
+
 export function LandingPage({ config }: LandingPageProps) {
   const [override, setOverride] = useState(() => getLandingOverride(config.slug));
   const [whatsappNumber, setWhatsappNumber] = useState(() => getDemoSettings().whatsappNumber);
@@ -37,9 +59,9 @@ export function LandingPage({ config }: LandingPageProps) {
   }, []);
 
   const heroTitle = override.heroTitle || config.heroTitle;
-  const heroDescription = override.heroDescription || config.heroDescription;
+  const heroDescription = toSpanishVisibleText(override.heroDescription || config.heroDescription);
   const heroAssetRef = override.heroImage || config.heroImage;
-  const heroCta = override.ctaPrimaryLabel || "Solicitar informacion";
+  const heroCta = override.ctaPrimaryLabel || "Solicitar información";
   const heroWhatsappHref = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(
     "Hola Gavejo, quiero mas informacion tecnica para mi proyecto."
   )}`;
@@ -50,11 +72,11 @@ export function LandingPage({ config }: LandingPageProps) {
       <>
         <PublicHeader />
         <main className="container section">
-          <span className="chip">Landing temporalmente inactiva</span>
+          <span className="chip">Página temporalmente inactiva</span>
           <h1>{config.navName}</h1>
           <p className="lead-text">
-            Esta landing esta en actualizacion desde el panel admin. Puedes volver al inicio o contactar
-            por WhatsApp.
+            Esta página está en actualización desde el panel de administración. Puedes volver al inicio o
+            contactar por WhatsApp.
           </p>
           <div className="hero-actions">
             <Link href="/" className="btn btn-primary">
@@ -79,7 +101,7 @@ export function LandingPage({ config }: LandingPageProps) {
           <div className="container hero-content hero-content-grid">
             <Reveal>
               <span className="chip chip-light">{config.heroBadge}</span>
-              <h1>{heroTitle}</h1>
+              <h1>{toSpanishVisibleText(heroTitle)}</h1>
               <p>{heroDescription}</p>
               <div className="hero-actions">
                 <a
@@ -104,8 +126,8 @@ export function LandingPage({ config }: LandingPageProps) {
             </Reveal>
 
             <Reveal delay={120}>
-              <NeonPlaceholder
-                label="Visual hero"
+                <NeonPlaceholder
+                label="Imagen principal"
                 caption={`Referencia actual: ${heroAssetRef}`}
                 minHeight={340}
                 aspectRatio="16 / 10"
@@ -118,10 +140,10 @@ export function LandingPage({ config }: LandingPageProps) {
           <div className="two-col">
             <Reveal>
               <p className="section-kicker">Introduccion</p>
-              <h2>{config.introTitle}</h2>
+              <h2>{toSpanishVisibleText(config.introTitle)}</h2>
             </Reveal>
             <Reveal delay={80}>
-              <p className="lead-text">{config.introDescription}</p>
+              <p className="lead-text">{toSpanishVisibleText(config.introDescription)}</p>
             </Reveal>
           </div>
         </section>
@@ -130,16 +152,21 @@ export function LandingPage({ config }: LandingPageProps) {
           <div className="container">
             <Reveal>
               <p className="section-kicker">Aplicaciones</p>
-              <h2>Escenarios de uso para arquitectura y contract</h2>
+              <h2>Escenarios de uso para arquitectura y proyectos profesionales</h2>
             </Reveal>
             <div className="grid grid-4">
               {config.applications.map((item, index) => (
                 <Reveal key={item.title} delay={index * 80}>
                   <article className="card card-pad">
-                    <NeonPlaceholder label={item.title} caption={item.image} minHeight={220} aspectRatio="4 / 3" />
+                    <NeonPlaceholder
+                      label={toSpanishVisibleText(item.title)}
+                      caption={item.image}
+                      minHeight={220}
+                      aspectRatio="4 / 3"
+                    />
                     <div className="card-body" style={{ paddingInline: 0, paddingBottom: 0 }}>
-                      <h3>{item.title}</h3>
-                      <p>{item.text}</p>
+                      <h3>{toSpanishVisibleText(item.title)}</h3>
+                      <p>{toSpanishVisibleText(item.text)}</p>
                     </div>
                   </article>
                 </Reveal>
@@ -151,22 +178,22 @@ export function LandingPage({ config }: LandingPageProps) {
         <section id="systems" className="section container">
           <Reveal>
             <p className="section-kicker">Sistemas</p>
-            <h2>Metodologia tecnica y operativa</h2>
+            <h2>Metodología técnica y operativa</h2>
           </Reveal>
           <div className="stack">
             {config.systems.map((item, index) => (
               <Reveal key={item.title} delay={index * 90}>
                 <article className="system-card">
                   <NeonPlaceholder
-                    label={`${item.number} ${item.title}`}
+                    label={`${item.number} ${toSpanishVisibleText(item.title)}`}
                     caption={item.image}
                     minHeight={260}
                     aspectRatio="4 / 3"
                   />
                   <div className="system-copy">
                     <p className="system-number">Sistema {item.number}</p>
-                    <h3>{item.title}</h3>
-                    <p>{item.text}</p>
+                    <h3>{toSpanishVisibleText(item.title)}</h3>
+                    <p>{toSpanishVisibleText(item.text)}</p>
                   </div>
                 </article>
               </Reveal>
@@ -178,22 +205,22 @@ export function LandingPage({ config }: LandingPageProps) {
           <div className="container">
             <Reveal>
               <p className="section-kicker">Materiales</p>
-              <h2>Catalogo tecnico con descargas directas</h2>
+              <h2>Catálogo técnico con descargas directas</h2>
             </Reveal>
             <div className="grid grid-3">
               {config.materials.map((item, index) => (
                 <Reveal key={item.title} delay={index * 80}>
                   <article className="card card-pad">
                     <NeonPlaceholder
-                      label={item.subtitle}
+                      label={toSpanishVisibleText(item.subtitle)}
                       caption={item.image}
                       minHeight={220}
                       aspectRatio="4 / 3"
                     />
                     <div className="card-body" style={{ paddingInline: 0, paddingBottom: 0 }}>
-                      <p className="mini-kicker">{item.subtitle}</p>
-                      <h3>{item.title}</h3>
-                      <p>{item.text}</p>
+                      <p className="mini-kicker">{toSpanishVisibleText(item.subtitle)}</p>
+                      <h3>{toSpanishVisibleText(item.title)}</h3>
+                      <p>{toSpanishVisibleText(item.text)}</p>
                       <a
                         className="btn btn-ghost"
                         href={item.ctaHref}
@@ -249,8 +276,8 @@ export function LandingPage({ config }: LandingPageProps) {
 
         <section className="section container">
           <Reveal>
-            <p className="section-kicker">Galeria de referencia</p>
-            <h2>Bloques visuales para sustituir por contenido final</h2>
+              <p className="section-kicker">Galería de referencia</p>
+              <h2>Bloques visuales para sustituir por contenido final</h2>
           </Reveal>
           <div className="grid grid-3">
             {config.gallery.map((item, index) => (
@@ -271,11 +298,11 @@ export function LandingPage({ config }: LandingPageProps) {
         <section className="section section-soft">
           <div className="container two-col">
             <Reveal>
-              <p className="section-kicker">Bloque tecnico</p>
-              <h2>Mensajes para arquitectos y direccion de proyecto</h2>
+              <p className="section-kicker">Bloque técnico</p>
+              <h2>Mensajes para arquitectos y dirección de proyecto</h2>
               <p className="lead-text">
-                Argumentos de durabilidad, normativa, trazabilidad y operacion para soportar decisiones de
-                especificacion.
+                Argumentos de durabilidad, normativa, trazabilidad y operación para soportar decisiones de
+                especificación.
               </p>
             </Reveal>
             <Reveal delay={80}>
@@ -305,7 +332,7 @@ export function LandingPage({ config }: LandingPageProps) {
                 <p className="section-kicker">Universo complementario</p>
                 <h2>{config.maderBalear.title}</h2>
                 <p className="lead-text" style={{ marginBottom: "1rem" }}>
-                  {config.maderBalear.text}
+                  {toSpanishVisibleText(config.maderBalear.text)}
                 </p>
                 <a className="btn btn-primary" href="#contact">
                   {config.maderBalear.ctaLabel}
@@ -319,10 +346,10 @@ export function LandingPage({ config }: LandingPageProps) {
           <div className="container two-col contact-wrap">
             <Reveal>
               <p className="section-kicker section-kicker-light">Contacto</p>
-              <h2>Solicita evaluacion tecnica para tu proyecto</h2>
+              <h2>Solicita evaluación técnica para tu proyecto</h2>
               <p className="lead-text">
                 Cierre comercial directo con formulario y WhatsApp para acelerar respuesta a cliente final,
-                arquitectura y prescripcion.
+                arquitectura y prescripción.
               </p>
               <div className="hero-actions" style={{ marginTop: "1rem" }}>
                 <a
@@ -331,11 +358,11 @@ export function LandingPage({ config }: LandingPageProps) {
                   onClick={() =>
                     trackEvent("cta_click", config.slug, {
                       section: "final",
-                      ctaLabel: "CTA final de contacto"
+                      ctaLabel: "llamado final de contacto"
                     })
                   }
                 >
-                  Hablar con asesor tecnico
+                  Hablar con asesor técnico
                 </a>
               </div>
             </Reveal>

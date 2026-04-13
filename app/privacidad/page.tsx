@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { NeonPlaceholder } from "@/components/ui/NeonPlaceholder";
 import { PublicHeader } from "@/components/ui/PublicHeader";
@@ -12,14 +12,14 @@ export default function PrivacidadPage() {
         <div className="two-col aux-page-grid">
           <Reveal>
             <span className="chip">Privacidad</span>
-            <h1>Politica de privacidad (demo)</h1>
+            <h1>Política de privacidad (demo)</h1>
             <p className="lead-text">
-              Esta demo utiliza datos del formulario para contacto comercial y validacion del flujo CRM.
+              Esta demo utiliza datos del formulario para contacto comercial y validación del flujo CRM.
             </p>
             <div className="card card-pad" style={{ marginTop: "1rem" }}>
               <p>
                 Responsable: Gavejo Maderas y Tableros. Finalidad: responder consultas y dar seguimiento comercial.
-                Conservacion: periodo necesario para la gestion de la solicitud en contexto demo.
+                Conservación: período necesario para la gestión de la solicitud en contexto demo.
               </p>
             </div>
             <div className="hero-actions" style={{ marginTop: "1rem" }}>
@@ -30,7 +30,7 @@ export default function PrivacidadPage() {
           </Reveal>
           <Reveal delay={90}>
             <NeonPlaceholder
-              label="Placeholder legal"
+              label="Marcador legal"
               caption="Sustituir por recurso visual de cumplimiento y confianza"
               minHeight={280}
             />
@@ -41,3 +41,4 @@ export default function PrivacidadPage() {
     </>
   );
 }
+

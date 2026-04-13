@@ -9,8 +9,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Gavejo Demo V3",
-  description: "Demo corporativa de Gavejo Maderas y Tableros"
+  title: "Gavejo Demo V3 | Inicio",
+  description: "Demo corporativa de Gavejo Maderas y Tableros con enfoque comercial y técnico"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

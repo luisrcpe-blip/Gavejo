@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { NeonPlaceholder } from "@/components/ui/NeonPlaceholder";
 import { PublicHeader } from "@/components/ui/PublicHeader";
@@ -12,20 +12,20 @@ export default function SolucionesPage() {
         <div className="two-col aux-page-grid">
           <Reveal>
             <span className="chip">Soluciones</span>
-            <h1>Linea de soluciones arquitectonicas</h1>
+            <h1>Línea de soluciones arquitectónicas</h1>
             <p className="lead-text">
-              Punto de entrada para navegar landings orientadas a captacion y especificacion tecnica.
+              Punto de entrada para navegar páginas orientadas a captación y especificación técnica.
             </p>
             <div className="hero-actions">
               <Link href="/soluciones/fachadas" className="btn btn-primary">
-                Fachadas y Revestimientos
+                Fachadas y revestimientos
               </Link>
             </div>
           </Reveal>
           <Reveal delay={90}>
             <NeonPlaceholder
-              label="Placeholder soluciones"
-              caption="Sustituir por visual real de sistema de fachada"
+              label="Marcador de soluciones"
+              caption="Sustituir por visual real del sistema de fachada"
               minHeight={280}
             />
           </Reveal>
@@ -35,3 +35,4 @@ export default function SolucionesPage() {
     </>
   );
 }
+

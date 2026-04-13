@@ -9,48 +9,48 @@ export const revalidate = 0;
 
 const kpiItems = [
   {
-    kicker: "ThermoWood",
+    kicker: "Madera termo tratada",
     value: "200 C+",
-    description: "Proceso termico para estabilidad y durabilidad sin biocidas."
+    description: "Proceso térmico para estabilidad y durabilidad sin biocidas."
   },
   {
     kicker: "Trazabilidad",
     value: "95%+ FSC",
-    description: "Volumen certificado para decisiones tecnicas con respaldo."
+    description: "Volumen certificado para decisiones técnicas con respaldo."
   },
   {
     kicker: "Durabilidad",
-    value: "15-25 anos",
-    description: "Vida util objetivo en exterior segun especie y uso."
+    value: "15-25 años",
+    description: "Vida útil objetivo en exterior según especie y uso."
   },
   {
-    kicker: "Captacion",
-    value: "2 landings",
+    kicker: "Captación",
+    value: "2 páginas",
     description: "Embudo demo completo con contacto, WhatsApp y CRM."
   }
 ];
 
 const solutionCards = [
   {
-    title: "Landing Fachadas",
+    title: "Fachadas y revestimientos",
     href: "/soluciones/fachadas",
-    caption: "Sistema de fachada ventilada, aplicaciones y bloque tecnico.",
-    placeholderLabel: "Fachadas Arquitectonicas",
-    placeholderCaption: "Mock verde: reemplazar por proyecto ejecutado",
+    caption: "Sistema de fachada ventilada, aplicaciones y bloque técnico.",
+    placeholderLabel: "Fachadas arquitectónicas",
+    placeholderCaption: "Marcador verde: reemplazar por proyecto ejecutado",
     points: [
       "Hero oscuro con foco comercial",
       "Sistemas numerados y materiales",
-      "CTA directo a contacto y WhatsApp"
+      "Llamado a la acción directo a contacto y WhatsApp"
     ]
   },
   {
-    title: "Landing Madera Termo Tratada",
+    title: "Madera termotratada",
     href: "/materiales/termo-tratada",
-    caption: "ThermoWood explicado para arquitectos y prescriptores.",
-    placeholderLabel: "Termo Modificacion",
-    placeholderCaption: "Mock verde: reemplazar por imagen real de material",
+    caption: "Madera termo tratada explicada para arquitectos y prescriptores.",
+    placeholderLabel: "Termo modificación",
+    placeholderCaption: "Marcador verde: reemplazar por imagen real del material",
     points: [
-      "Proceso y ventajas tecnicas",
+      "Proceso y ventajas técnicas",
       "Comparativa para decision de compra",
       "Formulario conectado al flujo CRM"
     ]
@@ -60,18 +60,18 @@ const solutionCards = [
 const ecosystemCards = [
   {
     title: "Prime Forest",
-    copy: "Origen forestal controlado para abastecimiento con criterio legal y tecnico.",
+    copy: "Origen forestal controlado para abastecimiento con criterio legal y técnico.",
     placeholder: "Silvicultura y frondosas europeas"
   },
   {
     title: "Treecraft Plywood",
-    copy: "Tableros de ingenieria con control de calidad y marco CE.",
+    copy: "Tableros de ingeniería con control de calidad y marco CE.",
     placeholder: "Contrachapado y trazabilidad"
   },
   {
     title: "Tantimber / LDCwood",
-    copy: "Catalogo de madera termotratada para envolventes, decking y contract.",
-    placeholder: "Cladding y exterior premium"
+    copy: "Catálogo de madera termotratada para envolventes, terrazas y proyectos profesionales.",
+    placeholder: "Revestimiento exterior premium"
   }
 ];
 
@@ -84,34 +84,35 @@ export default function HomePage() {
           <div className="container home-hero-grid">
             <Reveal>
               <span className="chip">Demo ejecutiva · Biomateriales avanzados</span>
-              <h1>Gavejo: plataforma comercial para fachadas y madera termo tratada</h1>
+              <h1>Gavejo: plataforma comercial para fachadas y madera termotratada</h1>
               <p className="lead-text home-lead">
-                Un home mas potente para presentar la propuesta al director: dos landings especializadas,
-                flujo de captacion demostrable y panel admin listo para gestionar leads en tiempo real.
+                Una página de inicio más potente para presentar la propuesta al director: dos páginas
+                especializadas, flujo de captación demostrable y panel de administración listo para
+                gestionar consultas en tiempo real.
               </p>
               <div className="hero-actions">
                 <Link href="/soluciones/fachadas" className="btn btn-primary">
-                  Ver Landing Fachadas
+                  Ver página de Fachadas
                 </Link>
                 <Link href="/materiales/termo-tratada" className="btn btn-secondary">
-                  Ver Landing Termo Tratada
+                  Ver página de Madera termotratada
                 </Link>
                 <Link href="/admin" className="btn btn-ghost">
-                  Abrir Panel Admin
+                  Abrir panel de administración
                 </Link>
               </div>
               <div className="home-mini-points">
                 <div className="home-mini-point">
                   <strong>Arquitectura</strong>
-                  <span>Lenguaje tecnico y visual sobrio para prescriptores.</span>
+                  <span>Lenguaje técnico y visual sobrio para prescriptores.</span>
                 </div>
                 <div className="home-mini-point">
-                  <strong>Conversion</strong>
-                  <span>CTA, WhatsApp y formulario listos para demos comerciales.</span>
+                  <strong>Conversión</strong>
+                  <span>Llamados a la acción, WhatsApp y formulario listos para demos comerciales.</span>
                 </div>
                 <div className="home-mini-point">
                   <strong>Escalabilidad</strong>
-                  <span>Estructura repetible para nuevas landings por solucion.</span>
+                  <span>Estructura repetible para nuevas páginas por solución.</span>
                 </div>
               </div>
             </Reveal>
@@ -120,7 +121,7 @@ export default function HomePage() {
               <Reveal delay={120}>
                 <NeonPlaceholder
                   label="Portada corporativa"
-                  caption="Cuadrado verde fosforescente para reemplazar por visual real"
+                  caption="Marcador verde para reemplazar por visual real"
                   minHeight={360}
                   aspectRatio="16 / 10"
                 />
@@ -128,14 +129,14 @@ export default function HomePage() {
               <Reveal delay={200}>
                 <article className="home-highlight-card">
                   <p className="section-kicker">Prueba funcional visible</p>
-                  <h3>Formulario -&gt; CRM -&gt; Dashboard en minutos</h3>
+                  <h3>Formulario -&gt; CRM -&gt; panel de control en minutos</h3>
                   <ul className="home-highlight-list">
-                    <li>Lead se crea desde landing con origen correcto.</li>
-                    <li>Estado editable en CRM: new / in_progress / closed.</li>
-                    <li>Contadores y actividad reflejados en admin.</li>
+                    <li>La consulta se crea desde la página con origen correcto.</li>
+                    <li>Estado editable en CRM: nuevo / en gestión / cerrado.</li>
+                    <li>Contadores y actividad reflejados en el panel de administración.</li>
                   </ul>
                   <Link href="/admin?tab=crm" className="btn btn-secondary">
-                    Ver CRM Leads
+                    Ver consultas en CRM
                   </Link>
                 </article>
               </Reveal>
@@ -159,11 +160,11 @@ export default function HomePage() {
           <div className="container">
             <Reveal>
               <div className="home-section-head">
-                <p className="section-kicker">Landings protagonistas</p>
-                <h2>Dos paginas de captacion listas para presentar y validar</h2>
+                <p className="section-kicker">Páginas protagonistas</p>
+                <h2>Dos páginas de captación listas para presentar y validar</h2>
                 <p className="lead-text">
-                  Cada landing responde a una linea de negocio concreta y mantiene la misma arquitectura comercial
-                  para escalar nuevas soluciones sin perder consistencia.
+                  Cada página responde a una línea de negocio concreta y mantiene la misma arquitectura
+                  comercial para escalar nuevas soluciones sin perder consistencia.
                 </p>
               </div>
             </Reveal>
@@ -201,8 +202,8 @@ export default function HomePage() {
           <div className="container">
             <Reveal>
               <div className="home-section-head">
-                <p className="section-kicker">Ecosistema tecnico</p>
-                <h2>Base narrativa para arquitectura, contract y suministro especializado</h2>
+                <p className="section-kicker">Ecosistema técnico</p>
+                <h2>Base narrativa para arquitectura, proyectos profesionales y suministro especializado</h2>
               </div>
             </Reveal>
             <div className="grid grid-3">
@@ -228,9 +229,9 @@ export default function HomePage() {
           <div className="container two-col">
             <Reveal>
               <p className="section-kicker">Ruta comercial</p>
-              <h2>De la visita web a la gestion comercial en un mismo entorno</h2>
+              <h2>De la visita web a la gestión comercial en un mismo entorno</h2>
               <p className="lead-text">
-                El cliente final ve una experiencia limpia y el equipo comercial recibe informacion accionable
+                El cliente final ve una experiencia limpia y el equipo comercial recibe información accionable
                 sin depender de procesos manuales.
               </p>
               <div className="home-workflow-panel">
@@ -238,22 +239,22 @@ export default function HomePage() {
                   <li className="workflow-step">
                     <span>1</span>
                     <div>
-                      <strong>Interes en landing</strong>
-                      <p>CTA principal y bloque final orientados a contacto real.</p>
+                      <strong>Interés en la página</strong>
+                      <p>Llamado principal a la acción y bloque final orientados a contacto real.</p>
                     </div>
                   </li>
                   <li className="workflow-step">
                     <span>2</span>
                     <div>
                       <strong>Formulario con consentimiento</strong>
-                      <p>Lead registrado con origen de landing y datos de contacto.</p>
+                      <p>Consulta registrada con origen de la página y datos de contacto.</p>
                     </div>
                   </li>
                   <li className="workflow-step">
                     <span>3</span>
                     <div>
                       <strong>Seguimiento en CRM</strong>
-                      <p>Estado editable, notas y export CSV para operativa comercial.</p>
+                      <p>Estado editable, notas y exportación CSV para la operativa comercial.</p>
                     </div>
                   </li>
                 </ol>
@@ -263,13 +264,13 @@ export default function HomePage() {
                   Ir a Contacto
                 </Link>
                 <Link href="/blog" className="btn btn-secondary">
-                  Ver Blog Tecnico
+                  Ver blog técnico
                 </Link>
               </div>
             </Reveal>
             <Reveal delay={100}>
               <NeonPlaceholder
-                label="Dashboard comercial"
+                label="Panel comercial"
                 caption="Sustituir por captura real del flujo CRM"
                 minHeight={320}
                 aspectRatio="16 / 10"
@@ -283,17 +284,17 @@ export default function HomePage() {
             <Reveal>
               <div className="home-final-card">
                 <p className="chip chip-light">Estado de la demo</p>
-                <h2>Presentacion lista para cliente: elegante, clara y accionable</h2>
+                <h2>Presentación lista para cliente: elegante, clara y accionable</h2>
                 <p className="lead-text">
-                  La demo comunica vision comercial hoy y deja preparado el camino a fase productiva
-                  con backend real, integraciones y operacion continua.
+                  La demo comunica visión comercial hoy y deja preparado el camino a la fase productiva
+                  con backend real, integraciones y operación continua.
                 </p>
                 <div className="hero-actions">
                   <Link href="/soluciones/fachadas" className="btn btn-light">
                     Iniciar recorrido
                   </Link>
                   <Link href="/admin" className="btn btn-outline-light">
-                    Abrir admin demo
+                    Abrir panel de administración
                   </Link>
                 </div>
               </div>

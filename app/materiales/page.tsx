@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { NeonPlaceholder } from "@/components/ui/NeonPlaceholder";
 import { PublicHeader } from "@/components/ui/PublicHeader";
@@ -12,19 +12,19 @@ export default function MaterialesPage() {
         <div className="two-col aux-page-grid">
           <Reveal>
             <span className="chip">Materiales</span>
-            <h1>Catalogo tecnico de biomateriales</h1>
+            <h1>Catálogo técnico de biomateriales</h1>
             <p className="lead-text">
-              Seleccion de lineas para fachada, deck e interior con enfoque en rendimiento y trazabilidad.
+              Selección de líneas para fachada, terrazas e interior con enfoque en rendimiento y trazabilidad.
             </p>
             <div className="hero-actions">
               <Link href="/materiales/termo-tratada" className="btn btn-primary">
-                Madera Termo Tratada (Tantimber)
+                Madera termotratada (Tantimber)
               </Link>
             </div>
           </Reveal>
           <Reveal delay={90}>
             <NeonPlaceholder
-              label="Placeholder materiales"
+              label="Marcador de materiales"
               caption="Sustituir por visual real de muestra de material"
               minHeight={280}
             />
@@ -35,3 +35,4 @@ export default function MaterialesPage() {
     </>
   );
 }
+

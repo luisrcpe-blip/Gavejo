@@ -6,19 +6,19 @@ export const PAGE_META_CHANGED_EVENT = "gavejo:page-meta-changed";
 const DEFAULT_PAGE_META: PageMeta[] = [
   {
     key: "home",
-    title: "Home",
+    title: "Inicio",
     route: "/",
-    h1: "Web corporativa orientada a captacion y posicionamiento tecnico",
-    seoTitle: "Gavejo Demo V3 | Home",
-    seoDescription: "Demo corporativa con enfoque comercial y tecnico."
+    h1: "Web corporativa orientada a captación y posicionamiento técnico",
+    seoTitle: "Gavejo Demo V3 | Inicio",
+    seoDescription: "Demo corporativa con enfoque comercial y técnico."
   },
   {
     key: "fachadas",
-    title: "Solucion Fachadas",
+    title: "Solución Fachadas",
     route: "/soluciones/fachadas",
-    h1: "Fachadas y revestimientos de madera con criterio tecnico",
+    h1: "Fachadas y revestimientos de madera con criterio técnico",
     seoTitle: "Fachadas y Revestimientos | Gavejo",
-    seoDescription: "Landing de solucion para envolventes y revestimientos."
+    seoDescription: "Landing de solución para envolventes y revestimientos."
   },
   {
     key: "tantimber",
@@ -26,13 +26,13 @@ const DEFAULT_PAGE_META: PageMeta[] = [
     route: "/materiales/termo-tratada",
     h1: "Madera termo tratada para fachadas, deck y envolventes",
     seoTitle: "Tantimber | Gavejo",
-    seoDescription: "Landing de material tecnico para exterior e interior."
+    seoDescription: "Landing de material técnico para exterior e interior."
   },
   {
     key: "contacto",
     title: "Contacto",
     route: "/contacto",
-    h1: "Solicite informacion para su proyecto",
+    h1: "Solicite información para su proyecto",
     seoTitle: "Contacto | Gavejo",
     seoDescription: "Formulario y WhatsApp para contacto directo."
   }
@@ -75,7 +75,7 @@ export async function savePageMeta(value: PageMeta[]) {
   });
 
   if (!response.ok) {
-    throw new Error("Page meta persistence failed");
+    throw new Error("Error al guardar los metadatos de página");
   }
 
   writePageMeta(value);
