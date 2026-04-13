@@ -4,6 +4,9 @@ import { NeonPlaceholder } from "@/components/ui/NeonPlaceholder";
 import { PublicHeader } from "@/components/ui/PublicHeader";
 import { Reveal } from "@/components/ui/Reveal";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const kpiItems = [
   {
     kicker: "ThermoWood",
