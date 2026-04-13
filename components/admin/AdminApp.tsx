@@ -57,6 +57,7 @@ const MODULES: Array<{ key: AdminModule; label: string }> = [
 
 export function AdminApp() {
   const [active, setActive] = useState<AdminModule>("dashboard");
+  const [menuOpenMobile, setMenuOpenMobile] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [settings, setSettings] = useState<DemoSettings>(getDemoSettings());
   const [eventsCount, setEventsCount] = useState(0);
@@ -167,6 +168,14 @@ export function AdminApp() {
     });
   }, [leads]);
 
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth > 840) setMenuOpenMobile(false);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   const exportCsv = () => {
     const csv = leadsToCsv(leads);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -276,12 +285,30 @@ export function AdminApp() {
           <h1>GAVEJO</h1>
           <p>Panel de demo</p>
         </div>
-        <nav className="admin-module-nav">
+        <button
+          type="button"
+          className={`admin-menu-toggle ${menuOpenMobile ? "is-open" : ""}`}
+          onClick={() => setMenuOpenMobile((prev) => !prev)}
+          aria-label={menuOpenMobile ? "Cerrar menu del panel" : "Abrir menu del panel"}
+          aria-expanded={menuOpenMobile}
+          aria-controls="admin-module-nav"
+        >
+          <span className="admin-menu-toggle-label">Modulos</span>
+          <span className="mobile-menu-bars" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </span>
+        </button>
+        <nav id="admin-module-nav" className={`admin-module-nav ${menuOpenMobile ? "is-open" : ""}`}>
           {MODULES.map((item) => (
             <button
               key={item.key}
               className={`nav-btn ${active === item.key ? "is-active" : ""}`}
-              onClick={() => setActive(item.key)}
+              onClick={() => {
+                setActive(item.key);
+                setMenuOpenMobile(false);
+              }}
             >
               <span className="nav-label">{item.label}</span>
               {item.key === "crm" && summary.fresh > 0 && <span className="badge-pulse">{summary.fresh}</span>}

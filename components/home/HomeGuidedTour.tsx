@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
 type TourStep = {
   title: string;
@@ -8,46 +8,48 @@ type TourStep = {
   targets?: string[];
 };
 
+type FocusRect = {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+  radius: number;
+};
+
 const TOUR_STEPS: TourStep[] = [
   {
     title: "Hola, esta es una pagina demo",
     description:
-      "Te indico las secciones disponibles y como navegar rapido por la demo comercial de Gavejo."
+      "Te indico las secciones disponibles. Por ahora la optimizacion del proyecto esta enfocada en modo computador, asi que idealmente revisala desde desktop."
   },
   {
     title: "Cabecera principal",
-    description:
-      "Desde aqui tienes el menu principal con acceso a Inicio, secciones comerciales y Admin.",
+    description: "Desde aqui tienes el menu principal con acceso a Inicio, secciones comerciales y Admin.",
     targets: ['[data-tour-id="header-nav-desktop"]', '[data-tour-id="mobile-menu-toggle"]']
   },
   {
     title: "Landing principal",
-    description:
-      "Este boton abre la landing principal de soluciones para mostrar fachadas y aplicaciones.",
+    description: "Este boton abre la landing principal de soluciones para mostrar fachadas y aplicaciones.",
     targets: ['[data-tour-id="cta-landing-1"]']
   },
   {
     title: "Landing de materiales",
-    description:
-      "Este boton abre la landing de madera termotratada con foco tecnico y comercial.",
+    description: "Este boton abre la landing de madera termotratada con foco tecnico y comercial.",
     targets: ['[data-tour-id="cta-landing-2"]']
   },
   {
     title: "Panel Admin",
-    description:
-      "Este boton te lleva al panel de administracion para ver CRM, leads y estado operativo.",
+    description: "Este boton te lleva al panel de administracion para ver CRM, leads y estado operativo.",
     targets: ['[data-tour-id="cta-admin"]']
   },
   {
     title: "Seccion de soluciones",
-    description:
-      "Aqui se muestran las dos landings protagonistas con estructura repetible para nuevas soluciones.",
+    description: "Aqui se muestran las dos landings protagonistas con estructura repetible para nuevas soluciones.",
     targets: ['[data-tour-id="section-soluciones"]']
   },
   {
     title: "Bloque comercial de contacto",
-    description:
-      "En esta seccion se explica el flujo visita > formulario > CRM para cerrar la narrativa comercial.",
+    description: "En esta seccion se explica el flujo visita > formulario > CRM para cerrar la narrativa comercial.",
     targets: ['[data-tour-id="section-contacto"]']
   },
   {
@@ -74,10 +76,17 @@ function findTarget(selectors?: string[]) {
   return null;
 }
 
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(value, max));
+}
+
 export function HomeGuidedTour() {
   const [isOpen, setIsOpen] = useState(true);
   const [stepIndex, setStepIndex] = useState(0);
+  const [focusRect, setFocusRect] = useState<FocusRect | null>(null);
+  const [cardStyle, setCardStyle] = useState<CSSProperties>({});
   const highlightedRef = useRef<HTMLElement | null>(null);
+  const cardRef = useRef<HTMLElement | null>(null);
 
   const activeStep = useMemo(() => TOUR_STEPS[stepIndex], [stepIndex]);
   const isLastStep = stepIndex === TOUR_STEPS.length - 1;
@@ -99,15 +108,92 @@ export function HomeGuidedTour() {
       highlightedRef.current = null;
     }
 
-    const target = findTarget(activeStep.targets);
-    if (!target) return;
+    const target = findTarget(activeStep.targets) as HTMLElement | null;
+    if (target) {
+      highlightedRef.current = target;
+      target.classList.add("tour-highlight-target");
+      target.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    }
 
-    const htmlTarget = target as HTMLElement;
-    highlightedRef.current = htmlTarget;
-    htmlTarget.classList.add("tour-highlight-target");
-    htmlTarget.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    const computeLayout = () => {
+      const margin = 16;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      const cardEl = cardRef.current;
+      const cardWidth = Math.min(Math.max((cardEl?.offsetWidth ?? 520), 320), vw - margin * 2);
+      const cardHeight = cardEl?.offsetHeight ?? 260;
+
+      if (!target) {
+        setFocusRect(null);
+        setCardStyle({
+          left: `${Math.round((vw - cardWidth) / 2)}px`,
+          top: `${Math.round((vh - cardHeight) / 2)}px`
+        });
+        return;
+      }
+
+      const rect = target.getBoundingClientRect();
+      const pad = 10;
+      const left = clamp(rect.left - pad, margin, vw - margin);
+      const top = clamp(rect.top - pad, margin, vh - margin);
+      const right = clamp(rect.right + pad, margin, vw - margin);
+      const bottom = clamp(rect.bottom + pad, margin, vh - margin);
+      const width = Math.max(44, right - left);
+      const height = Math.max(36, bottom - top);
+
+      setFocusRect({
+        left: Math.round(left),
+        top: Math.round(top),
+        width: Math.round(width),
+        height: Math.round(height),
+        radius: 14
+      });
+
+      const gap = 16;
+      const candidates = [
+        {
+          x: right + gap,
+          y: top + height / 2 - cardHeight / 2
+        },
+        {
+          x: left - cardWidth - gap,
+          y: top + height / 2 - cardHeight / 2
+        },
+        {
+          x: left + width / 2 - cardWidth / 2,
+          y: bottom + gap
+        },
+        {
+          x: left + width / 2 - cardWidth / 2,
+          y: top - cardHeight - gap
+        }
+      ];
+
+      const fit = candidates.find(
+        (candidate) =>
+          candidate.x >= margin &&
+          candidate.y >= margin &&
+          candidate.x + cardWidth <= vw - margin &&
+          candidate.y + cardHeight <= vh - margin
+      );
+
+      const fallback = fit ?? candidates[2] ?? { x: margin, y: margin };
+
+      setCardStyle({
+        left: `${Math.round(clamp(fallback.x, margin, vw - cardWidth - margin))}px`,
+        top: `${Math.round(clamp(fallback.y, margin, vh - cardHeight - margin))}px`
+      });
+    };
+
+    const raf = window.requestAnimationFrame(computeLayout);
+    window.addEventListener("resize", computeLayout);
+    window.addEventListener("scroll", computeLayout, { passive: true });
 
     return () => {
+      window.cancelAnimationFrame(raf);
+      window.removeEventListener("resize", computeLayout);
+      window.removeEventListener("scroll", computeLayout);
       if (highlightedRef.current) {
         highlightedRef.current.classList.remove("tour-highlight-target");
         highlightedRef.current = null;
@@ -148,8 +234,20 @@ export function HomeGuidedTour() {
 
   return (
     <div className="guided-tour-overlay" role="dialog" aria-modal="true" aria-labelledby="guided-tour-title">
-      <div className="guided-tour-backdrop" />
-      <article className="guided-tour-card">
+      <div className={`guided-tour-backdrop ${focusRect ? "is-soft" : ""}`} />
+      {focusRect && (
+        <div
+          className="guided-tour-focus"
+          style={{
+            left: `${focusRect.left}px`,
+            top: `${focusRect.top}px`,
+            width: `${focusRect.width}px`,
+            height: `${focusRect.height}px`,
+            borderRadius: `${focusRect.radius}px`
+          }}
+        />
+      )}
+      <article ref={cardRef} className="guided-tour-card" style={cardStyle}>
         <p className="section-kicker">Recorrido guiado</p>
         <h3 id="guided-tour-title">{activeStep.title}</h3>
         <p>{activeStep.description}</p>

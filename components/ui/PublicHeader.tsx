@@ -3,35 +3,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MouseEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 type HeaderVariant = "solid" | "overlay" | "clean";
 
 const NAV_LINKS = [
-  { href: "/", label: "Inicio", comingSoon: false },
-  { href: "/soluciones", label: "Soluciones", comingSoon: true },
-  { href: "/materiales", label: "Materiales", comingSoon: true },
-  { href: "/mader-balear", label: "Madera Balear", comingSoon: true },
-  { href: "/blog", label: "Blog", comingSoon: true },
-  { href: "/contacto", label: "Contacto", comingSoon: true },
-  { href: "/admin", label: "Admin", comingSoon: false }
+  { href: "/", label: "Inicio" },
+  { href: "/soluciones", label: "Soluciones" },
+  { href: "/materiales", label: "Materiales" },
+  { href: "/mader-balear", label: "Madera Balear" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contacto", label: "Contacto" },
+  { href: "/admin", label: "Admin" }
 ];
 
 export function PublicHeader() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [comingSoonToast, setComingSoonToast] = useState<{
-    visible: boolean;
-    top: number;
-    left: number;
-    above: boolean;
-  }>({
-    visible: false,
-    top: 0,
-    left: 0,
-    above: false
-  });
 
   const landingRoutes = ["/soluciones/fachadas", "/materiales/termo-tratada", "/mader-balear"];
 
@@ -56,15 +45,6 @@ export function PublicHeader() {
   }, [variant]);
 
   useEffect(() => {
-    if (!comingSoonToast.visible) return;
-    const timeout = window.setTimeout(
-      () => setComingSoonToast((prev) => ({ ...prev, visible: false })),
-      2200
-    );
-    return () => window.clearTimeout(timeout);
-  }, [comingSoonToast.visible]);
-
-  useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
@@ -76,25 +56,6 @@ export function PublicHeader() {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
-
-  const onMenuClick = (event: MouseEvent<HTMLAnchorElement>, item: (typeof NAV_LINKS)[number]) => {
-    if (!item.comingSoon) {
-      setMobileOpen(false);
-      return;
-    }
-
-    event.preventDefault();
-    const rect = event.currentTarget.getBoundingClientRect();
-    const verticalGap = 10;
-    const preferAbove = rect.top > window.innerHeight * 0.68;
-
-    setComingSoonToast({
-      visible: true,
-      left: rect.left + rect.width / 2,
-      top: preferAbove ? rect.top - verticalGap : rect.bottom + verticalGap,
-      above: preferAbove
-    });
-  };
 
   return (
     <header
@@ -118,13 +79,7 @@ export function PublicHeader() {
 
         <nav className="topnav" data-tour-id="header-nav-desktop">
           {NAV_LINKS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={isActive(item.href) ? "is-active" : ""}
-              onClick={(event) => onMenuClick(event, item)}
-              aria-disabled={item.comingSoon ? "true" : undefined}
-            >
+            <Link key={item.href} href={item.href} className={isActive(item.href) ? "is-active" : ""}>
               {item.label}
             </Link>
           ))}
@@ -155,25 +110,12 @@ export function PublicHeader() {
               key={item.href}
               href={item.href}
               className={isActive(item.href) ? "is-active" : ""}
-              onClick={(event) => onMenuClick(event, item)}
-              aria-disabled={item.comingSoon ? "true" : undefined}
+              onClick={() => setMobileOpen(false)}
             >
               {item.label}
             </Link>
           ))}
         </nav>
-      </div>
-
-      <div
-        className={`coming-soon-toast ${comingSoonToast.visible ? "is-visible" : ""} ${
-          comingSoonToast.above ? "is-above" : ""
-        }`}
-        style={{ left: `${comingSoonToast.left}px`, top: `${comingSoonToast.top}px` }}
-        role="status"
-        aria-live="polite"
-      >
-        <span className="coming-soon-dot" />
-        <span>{"\u00a1Pr\u00f3ximamente!"}</span>
       </div>
     </header>
   );
