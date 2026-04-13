@@ -10,7 +10,7 @@ const NAV_LINKS = [
   { href: "/", label: "Inicio" },
   { href: "/soluciones", label: "Soluciones" },
   { href: "/materiales", label: "Materiales" },
-  { href: "/mader-balear", label: "Mader Balear" },
+  { href: "/mader-balear", label: "Madera Balear" },
   { href: "/blog", label: "Blog" },
   { href: "/contacto", label: "Contacto" },
   { href: "/admin", label: "Admin" }
@@ -18,7 +18,7 @@ const NAV_LINKS = [
 
 export function PublicHeader() {
   const pathname = usePathname();
-  const landingRoutes = ["/soluciones/fachadas", "/materiales/termo-tratada"];
+  const landingRoutes = ["/soluciones/fachadas", "/materiales/termo-tratada", "/mader-balear"];
 
   const variant: HeaderVariant =
     pathname === "/" ? "solid" : landingRoutes.some((route) => pathname.startsWith(route)) ? "overlay" : "clean";

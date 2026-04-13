@@ -114,7 +114,7 @@ export const fachadasLanding: LandingConfig = {
   ],
   maderBalear: {
     title: "Capa diferencial para proyectos de autor",
-    text: "Mader Balear se incorpora como bloque editorial para propuestas con caracter artesanal, sin perder la logica tecnica del sistema principal.",
+    text: "Madera Balear se incorpora como bloque editorial para propuestas con caracter artesanal, sin perder la logica tecnica del sistema principal.",
     image: "PH-FACHADAS-BANNER-01",
     ctaLabel: "Consultar linea complementaria"
   },
@@ -235,7 +235,7 @@ export const termoLanding: LandingConfig = {
   ],
   maderBalear: {
     title: "Complemento de narrativa material",
-    text: "Cuando el proyecto pide una capa emocional adicional, Mader Balear se suma como recurso de identidad sin perder el eje tecnico del material principal.",
+    text: "Cuando el proyecto pide una capa emocional adicional, Madera Balear se suma como recurso de identidad sin perder el eje tecnico del material principal.",
     image: "PH-TERMO-BANNER-01",
     ctaLabel: "Solicitar combinacion de lineas"
   },
