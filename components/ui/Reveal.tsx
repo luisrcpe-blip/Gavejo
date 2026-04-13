@@ -6,9 +6,5 @@ type RevealProps = PropsWithChildren<{
 }>;
 
 export function Reveal({ children, className, delay = 0 }: RevealProps) {
-  return (
-    <div className={`reveal is-visible ${className ?? ""}`} style={{ transitionDelay: `${delay}ms` }}>
-      {children}
-    </div>
-  );
+  return <div className={`reveal is-visible ${className ?? ""}`} style={{ animationDelay: `${delay}ms` }}>{children}</div>;
 }
