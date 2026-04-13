@@ -45,12 +45,12 @@ const TOUR_STEPS: TourStep[] = [
   {
     title: "Seccion de soluciones",
     description: "Aqui se muestran las dos landings protagonistas con estructura repetible para nuevas soluciones.",
-    targets: ['[data-tour-id="section-soluciones"]']
+    targets: ['[data-tour-id="section-soluciones-head"]']
   },
   {
     title: "Bloque comercial de contacto",
     description: "En esta seccion se explica el flujo visita > formulario > CRM para cerrar la narrativa comercial.",
-    targets: ['[data-tour-id="section-contacto"]']
+    targets: ['[data-tour-id="section-contacto-head"]']
   },
   {
     title: "Recorrido finalizado",
@@ -93,15 +93,6 @@ export function HomeGuidedTour() {
 
   useEffect(() => {
     if (!isOpen) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (!isOpen) return;
 
     if (highlightedRef.current) {
       highlightedRef.current.classList.remove("tour-highlight-target");
@@ -141,6 +132,7 @@ export function HomeGuidedTour() {
       const bottom = clamp(rect.bottom + pad, margin, vh - margin);
       const width = Math.max(44, right - left);
       const height = Math.max(36, bottom - top);
+      const isLargeTarget = width > vw * 0.82 || height > vh * 0.68;
 
       setFocusRect({
         left: Math.round(left),
@@ -149,6 +141,14 @@ export function HomeGuidedTour() {
         height: Math.round(height),
         radius: 14
       });
+
+      if (isLargeTarget) {
+        setCardStyle({
+          left: `${margin}px`,
+          top: `${margin}px`
+        });
+        return;
+      }
 
       const gap = 16;
       const candidates = [

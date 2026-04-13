@@ -45,13 +45,13 @@ import {
 
 type AdminModule = "dashboard" | "pages" | "landings" | "blog" | "media" | "crm" | "settings";
 
-const MODULES: Array<{ key: AdminModule; label: string }> = [
+const MODULES: Array<{ key: AdminModule; label: string; mobileLabel?: string }> = [
   { key: "dashboard", label: "Panel" },
   { key: "pages", label: "Páginas" },
   { key: "landings", label: "Landings" },
   { key: "blog", label: "Blog" },
   { key: "media", label: "Medios" },
-  { key: "crm", label: "CRM de leads" },
+  { key: "crm", label: "CRM de leads", mobileLabel: "CRM" },
   { key: "settings", label: "Ajustes" }
 ];
 
@@ -310,7 +310,8 @@ export function AdminApp() {
                 setMenuOpenMobile(false);
               }}
             >
-              <span className="nav-label">{item.label}</span>
+              <span className="nav-label nav-label-desktop">{item.label}</span>
+              <span className="nav-label nav-label-mobile">{item.mobileLabel ?? item.label}</span>
               {item.key === "crm" && summary.fresh > 0 && <span className="badge-pulse">{summary.fresh}</span>}
             </button>
           ))}

@@ -152,7 +152,7 @@ export default function HomePage() {
         <section className="section" id="soluciones" data-tour-id="section-soluciones">
           <div className="container">
             <Reveal>
-              <div className="home-section-head">
+              <div className="home-section-head" data-tour-id="section-soluciones-head">
                 <p className="section-kicker">Páginas protagonistas</p>
                 <h2>Dos páginas de captación listas para presentar y validar</h2>
                 <p className="lead-text">
@@ -221,12 +221,14 @@ export default function HomePage() {
         <section className="section section-soft" id="contacto" data-tour-id="section-contacto">
           <div className="container two-col">
             <Reveal>
-              <p className="section-kicker">Ruta comercial</p>
-              <h2>De la visita web a la gestión comercial en un mismo entorno</h2>
-              <p className="lead-text">
-                El cliente final ve una experiencia limpia y el equipo comercial recibe información accionable
-                sin depender de procesos manuales.
-              </p>
+              <div data-tour-id="section-contacto-head">
+                <p className="section-kicker">Ruta comercial</p>
+                <h2>De la visita web a la gestión comercial en un mismo entorno</h2>
+                <p className="lead-text">
+                  El cliente final ve una experiencia limpia y el equipo comercial recibe información accionable
+                  sin depender de procesos manuales.
+                </p>
+              </div>
               <div className="home-workflow-panel">
                 <ol className="workflow-list">
                   <li className="workflow-step">

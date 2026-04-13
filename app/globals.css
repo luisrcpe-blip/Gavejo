@@ -956,6 +956,7 @@ p {
   position: fixed;
   inset: 0;
   z-index: 120;
+  pointer-events: none;
 }
 
 .guided-tour-backdrop {
@@ -966,7 +967,7 @@ p {
 }
 
 .guided-tour-backdrop.is-soft {
-  background: rgba(2, 6, 23, 0.44);
+  background: rgba(2, 6, 23, 0);
 }
 
 .guided-tour-focus {
@@ -974,10 +975,11 @@ p {
   z-index: 123;
   pointer-events: none;
   border: 2px solid rgba(99, 102, 241, 0.95);
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
   box-shadow:
-    0 0 0 9999px rgba(2, 6, 23, 0.78),
-    0 16px 36px rgba(2, 6, 23, 0.45);
+    0 0 0 9999px rgba(2, 6, 23, 0.76),
+    0 16px 36px rgba(2, 6, 23, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.92);
   transition:
     left var(--transition-base) var(--ease-main),
     top var(--transition-base) var(--ease-main),
@@ -999,6 +1001,7 @@ p {
   display: grid;
   gap: 0.7rem;
   z-index: 126;
+  pointer-events: auto;
   transition:
     left var(--transition-base) var(--ease-main),
     top var(--transition-base) var(--ease-main);
@@ -1374,7 +1377,8 @@ p {
   background: rgba(255, 255, 255, 0.06);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 0.5rem;
   cursor: pointer;
   transition: background-color var(--transition-base) var(--ease-main);
 }
@@ -1384,6 +1388,11 @@ p {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: 1.2;
+}
+
+.nav-label-mobile {
+  display: none;
 }
 
 .nav-btn:hover,
@@ -1398,6 +1407,8 @@ p {
   font-size: 0.75rem;
   background: #f97316;
   color: #fff;
+  margin-left: auto;
+  flex-shrink: 0;
   animation: pulse 1.4s infinite;
 }
 
@@ -1794,6 +1805,14 @@ p {
     padding: 0.56rem 0.62rem;
     min-height: 42px;
     font-size: 0.8rem;
+  }
+
+  .nav-label-desktop {
+    display: none;
+  }
+
+  .nav-label-mobile {
+    display: inline;
   }
 
   .admin-main {
