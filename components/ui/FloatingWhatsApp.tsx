@@ -2,13 +2,27 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { trackEvent } from "@/lib/analytics-store";
+import { Locale } from "@/lib/i18n";
 import { getDemoSettings, subscribeSettings, syncSettingsFromServer } from "@/lib/settings-store";
 
 type FloatingWhatsAppProps = {
   sourcePage: string;
+  locale?: Locale;
 };
 
-export function FloatingWhatsApp({ sourcePage }: FloatingWhatsAppProps) {
+const WHATSAPP_COPY: Record<Locale, { message: string; ariaLabel: string }> = {
+  es: {
+    message: "Hola Gavejo, quiero informacion para mi proyecto.",
+    ariaLabel: "Abrir WhatsApp"
+  },
+  en: {
+    message: "Hello Gavejo, I would like information for my project.",
+    ariaLabel: "Open WhatsApp"
+  }
+};
+
+export function FloatingWhatsApp({ sourcePage, locale = "es" }: FloatingWhatsAppProps) {
+  const copy = WHATSAPP_COPY[locale];
   const [phone, setPhone] = useState(getDemoSettings().whatsappNumber);
   const [hidden, setHidden] = useState(false);
 
@@ -45,10 +59,8 @@ export function FloatingWhatsApp({ sourcePage }: FloatingWhatsAppProps) {
 
   const href = useMemo(() => {
     const clean = phone.replace(/\D/g, "");
-    return `https://wa.me/${clean}?text=${encodeURIComponent(
-      "Hola Gavejo, quiero informacion para mi proyecto."
-    )}`;
-  }, [phone]);
+    return `https://wa.me/${clean}?text=${encodeURIComponent(copy.message)}`;
+  }, [copy.message, phone]);
 
   return (
     <a
@@ -57,7 +69,7 @@ export function FloatingWhatsApp({ sourcePage }: FloatingWhatsAppProps) {
       target="_blank"
       rel="noreferrer"
       onClick={() => trackEvent("whatsapp_click", sourcePage, { placement: "floating" })}
-      aria-label="Abrir WhatsApp"
+      aria-label={copy.ariaLabel}
     >
       <svg
         aria-hidden="true"

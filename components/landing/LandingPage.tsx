@@ -8,6 +8,7 @@ import { NeonPlaceholder } from "@/components/ui/NeonPlaceholder";
 import { PublicHeader } from "@/components/ui/PublicHeader";
 import { Reveal } from "@/components/ui/Reveal";
 import { trackEvent } from "@/lib/analytics-store";
+import { Locale, localizePath } from "@/lib/i18n";
 import {
   getLandingOverride,
   subscribeLandingOverrides,
@@ -18,6 +19,116 @@ import { LandingConfig } from "@/lib/types";
 
 type LandingPageProps = {
   config: LandingConfig;
+  locale?: Locale;
+};
+
+const EMPTY_OVERRIDE = {
+  active: true,
+  heroTitle: "",
+  heroDescription: "",
+  heroImage: "",
+  ctaPrimaryLabel: ""
+};
+
+const LANDING_COPY: Record<
+  Locale,
+  {
+    inactiveBadge: string;
+    inactiveMessage: string;
+    backHome: string;
+    contactButton: string;
+    contactKicker: string;
+    heroCta: string;
+    heroWhatsappMessage: string;
+    intro: string;
+    applications: string;
+    applicationsTitle: string;
+    systems: string;
+    systemsTitle: string;
+    systemNumber: string;
+    materials: string;
+    materialsTitle: string;
+    specs: string;
+    specsTitle: string;
+    specsParam: string;
+    specsDetail: string;
+    gallery: string;
+    galleryTitle: string;
+    frame: string;
+    technicalBlock: string;
+    technicalTitle: string;
+    technicalText: string;
+    differentialBlock: string;
+    contactTitle: string;
+    contactText: string;
+  }
+> = {
+  es: {
+    inactiveBadge: "Pagina temporalmente inactiva",
+    inactiveMessage:
+      "Esta pagina esta en actualizacion desde el panel de administracion. Puedes volver al inicio o contactar por WhatsApp.",
+    backHome: "Volver al inicio",
+    contactButton: "Ir a contacto",
+    contactKicker: "Contacto",
+    heroCta: "Solicitar informacion",
+    heroWhatsappMessage: "Hola Gavejo, quiero mas informacion tecnica para mi proyecto.",
+    intro: "Introduccion",
+    applications: "Aplicaciones",
+    applicationsTitle: "Escenarios de uso para arquitectura y proyectos profesionales",
+    systems: "Sistemas",
+    systemsTitle: "Metodologia tecnica y operativa",
+    systemNumber: "Sistema",
+    materials: "Materiales",
+    materialsTitle: "Catalogo tecnico con descargas directas",
+    specs: "Especificaciones",
+    specsTitle: "Ficha tecnica sintetica",
+    specsParam: "Parametro",
+    specsDetail: "Detalle",
+    gallery: "Galeria de referencia",
+    galleryTitle: "Bloques visuales para sustituir por contenido final",
+    frame: "Frame",
+    technicalBlock: "Bloque tecnico",
+    technicalTitle: "Mensajes para arquitectos y direccion de proyecto",
+    technicalText:
+      "Argumentos de durabilidad, normativa, trazabilidad y operacion para soportar decisiones de especificacion.",
+    differentialBlock: "Universo complementario",
+    contactTitle: "Solicita evaluacion tecnica para tu proyecto",
+    contactText:
+      "Cierre comercial directo con formulario y WhatsApp para acelerar respuesta a cliente final, arquitectura y prescripcion."
+  },
+  en: {
+    inactiveBadge: "Page temporarily inactive",
+    inactiveMessage:
+      "This page is being updated from the admin panel. You can go back home or contact us on WhatsApp.",
+    backHome: "Back to home",
+    contactButton: "Go to contact",
+    contactKicker: "Contact",
+    heroCta: "Request information",
+    heroWhatsappMessage: "Hello Gavejo, I would like technical information for my project.",
+    intro: "Introduction",
+    applications: "Applications",
+    applicationsTitle: "Use cases for architecture and professional projects",
+    systems: "Systems",
+    systemsTitle: "Technical and operational methodology",
+    systemNumber: "System",
+    materials: "Materials",
+    materialsTitle: "Technical catalog with direct downloads",
+    specs: "Specifications",
+    specsTitle: "Summary technical sheet",
+    specsParam: "Parameter",
+    specsDetail: "Detail",
+    gallery: "Reference gallery",
+    galleryTitle: "Visual blocks ready to be replaced with final content",
+    frame: "Frame",
+    technicalBlock: "Technical block",
+    technicalTitle: "Messages for architects and project managers",
+    technicalText:
+      "Durability, compliance, traceability and operation arguments to support specification decisions.",
+    differentialBlock: "Complementary universe",
+    contactTitle: "Request a technical assessment for your project",
+    contactText:
+      "A direct commercial close with form and WhatsApp to speed up response for clients, architects and specifiers."
+  }
 };
 
 function toSpanishVisibleText(value: string) {
@@ -39,18 +150,28 @@ function toSpanishVisibleText(value: string) {
     .replace(/\bHero\b/g, "Portada")
     .replace(/\bVisual hero\b/g, "Imagen principal")
     .replace(/\bDashboard\b/g, "Panel")
-    .replace(/\bLead\b/g, "Consulta");
+     .replace(/\bLead\b/g, "Consulta");
 }
 
-export function LandingPage({ config }: LandingPageProps) {
-  const [override, setOverride] = useState(() => getLandingOverride(config.slug));
+function toVisibleText(value: string, locale: Locale) {
+  return locale === "es" ? toSpanishVisibleText(value) : value;
+}
+
+export function LandingPage({ config, locale = "es" }: LandingPageProps) {
+  const copy = LANDING_COPY[locale];
+  const [override, setOverride] = useState(() => (locale === "es" ? getLandingOverride(config.slug) : EMPTY_OVERRIDE));
   const [whatsappNumber, setWhatsappNumber] = useState(() => getDemoSettings().whatsappNumber);
 
   useEffect(() => {
+    if (locale !== "es") {
+      setOverride(EMPTY_OVERRIDE);
+      return;
+    }
+
     void syncLandingOverridesFromServer().then(() => setOverride(getLandingOverride(config.slug)));
     setOverride(getLandingOverride(config.slug));
     return subscribeLandingOverrides(() => setOverride(getLandingOverride(config.slug)));
-  }, [config.slug]);
+  }, [config.slug, locale]);
 
   useEffect(() => {
     void syncSettingsFromServer().then(() => setWhatsappNumber(getDemoSettings().whatsappNumber));
@@ -59,11 +180,11 @@ export function LandingPage({ config }: LandingPageProps) {
   }, []);
 
   const heroTitle = override.heroTitle || config.heroTitle;
-  const heroDescription = toSpanishVisibleText(override.heroDescription || config.heroDescription);
+  const heroDescription = toVisibleText(override.heroDescription || config.heroDescription, locale);
   const heroAssetRef = override.heroImage || config.heroImage;
-  const heroCta = override.ctaPrimaryLabel || "Solicitar información";
+  const heroCta = override.ctaPrimaryLabel || copy.heroCta;
   const heroWhatsappHref = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(
-    "Hola Gavejo, quiero mas informacion tecnica para mi proyecto."
+    copy.heroWhatsappMessage
   )}`;
   const isLandingActive = useMemo(() => override.active, [override.active]);
 
@@ -72,21 +193,18 @@ export function LandingPage({ config }: LandingPageProps) {
       <>
         <PublicHeader />
         <main className="container section">
-          <span className="chip">Página temporalmente inactiva</span>
+          <span className="chip">{copy.inactiveBadge}</span>
           <h1>{config.navName}</h1>
-          <p className="lead-text">
-            Esta página está en actualización desde el panel de administración. Puedes volver al inicio o
-            contactar por WhatsApp.
-          </p>
+          <p className="lead-text">{copy.inactiveMessage}</p>
           <div className="hero-actions">
-            <Link href="/" className="btn btn-primary">
-              Volver al inicio
+            <Link href={localizePath("/", locale)} className="btn btn-primary">
+              {copy.backHome}
             </Link>
-            <Link href="/contacto" className="btn btn-secondary">
-              Ir a contacto
+            <Link href={localizePath("/contacto", locale)} className="btn btn-secondary">
+              {copy.contactButton}
             </Link>
           </div>
-          <FloatingWhatsApp sourcePage={config.slug} />
+          <FloatingWhatsApp sourcePage={config.slug} locale={locale} />
         </main>
       </>
     );
@@ -101,7 +219,7 @@ export function LandingPage({ config }: LandingPageProps) {
           <div className="container hero-content hero-content-grid">
             <Reveal>
               <span className="chip chip-light">{config.heroBadge}</span>
-              <h1>{toSpanishVisibleText(heroTitle)}</h1>
+              <h1>{toVisibleText(heroTitle, locale)}</h1>
               <p>{heroDescription}</p>
               <div className="hero-actions">
                 <a
@@ -139,11 +257,11 @@ export function LandingPage({ config }: LandingPageProps) {
         <section id="intro" className="section container">
           <div className="two-col">
             <Reveal>
-              <p className="section-kicker">Introduccion</p>
-              <h2>{toSpanishVisibleText(config.introTitle)}</h2>
+              <p className="section-kicker">{copy.intro}</p>
+              <h2>{toVisibleText(config.introTitle, locale)}</h2>
             </Reveal>
             <Reveal delay={80}>
-              <p className="lead-text">{toSpanishVisibleText(config.introDescription)}</p>
+              <p className="lead-text">{toVisibleText(config.introDescription, locale)}</p>
             </Reveal>
           </div>
         </section>
@@ -151,22 +269,22 @@ export function LandingPage({ config }: LandingPageProps) {
         <section id="applications" className="section section-soft">
           <div className="container">
             <Reveal>
-              <p className="section-kicker">Aplicaciones</p>
-              <h2>Escenarios de uso para arquitectura y proyectos profesionales</h2>
+              <p className="section-kicker">{copy.applications}</p>
+              <h2>{copy.applicationsTitle}</h2>
             </Reveal>
             <div className="grid grid-4">
               {config.applications.map((item, index) => (
                 <Reveal key={item.title} delay={index * 80}>
                   <article className="card card-pad">
                     <NeonPlaceholder
-                      label={toSpanishVisibleText(item.title)}
+                      label={toVisibleText(item.title, locale)}
                       caption={item.image}
                       minHeight={220}
                       aspectRatio="4 / 3"
                     />
                     <div className="card-body" style={{ paddingInline: 0, paddingBottom: 0 }}>
-                      <h3>{toSpanishVisibleText(item.title)}</h3>
-                      <p>{toSpanishVisibleText(item.text)}</p>
+                      <h3>{toVisibleText(item.title, locale)}</h3>
+                      <p>{toVisibleText(item.text, locale)}</p>
                     </div>
                   </article>
                 </Reveal>
@@ -177,23 +295,25 @@ export function LandingPage({ config }: LandingPageProps) {
 
         <section id="systems" className="section container">
           <Reveal>
-            <p className="section-kicker">Sistemas</p>
-            <h2>Metodología técnica y operativa</h2>
+            <p className="section-kicker">{copy.systems}</p>
+            <h2>{copy.systemsTitle}</h2>
           </Reveal>
           <div className="stack">
             {config.systems.map((item, index) => (
               <Reveal key={item.title} delay={index * 90}>
                 <article className="system-card">
                   <NeonPlaceholder
-                    label={`${item.number} ${toSpanishVisibleText(item.title)}`}
+                    label={`${item.number} ${toVisibleText(item.title, locale)}`}
                     caption={item.image}
                     minHeight={260}
                     aspectRatio="4 / 3"
                   />
                   <div className="system-copy">
-                    <p className="system-number">Sistema {item.number}</p>
-                    <h3>{toSpanishVisibleText(item.title)}</h3>
-                    <p>{toSpanishVisibleText(item.text)}</p>
+                    <p className="system-number">
+                      {copy.systemNumber} {item.number}
+                    </p>
+                    <h3>{toVisibleText(item.title, locale)}</h3>
+                    <p>{toVisibleText(item.text, locale)}</p>
                   </div>
                 </article>
               </Reveal>
@@ -204,23 +324,23 @@ export function LandingPage({ config }: LandingPageProps) {
         <section id="materials" className="section section-soft">
           <div className="container">
             <Reveal>
-              <p className="section-kicker">Materiales</p>
-              <h2>Catálogo técnico con descargas directas</h2>
+              <p className="section-kicker">{copy.materials}</p>
+              <h2>{copy.materialsTitle}</h2>
             </Reveal>
             <div className="grid grid-3">
               {config.materials.map((item, index) => (
                 <Reveal key={item.title} delay={index * 80}>
                   <article className="card card-pad">
                     <NeonPlaceholder
-                      label={toSpanishVisibleText(item.subtitle)}
+                      label={toVisibleText(item.subtitle, locale)}
                       caption={item.image}
                       minHeight={220}
                       aspectRatio="4 / 3"
                     />
                     <div className="card-body" style={{ paddingInline: 0, paddingBottom: 0 }}>
-                      <p className="mini-kicker">{toSpanishVisibleText(item.subtitle)}</p>
-                      <h3>{toSpanishVisibleText(item.title)}</h3>
-                      <p>{toSpanishVisibleText(item.text)}</p>
+                      <p className="mini-kicker">{toVisibleText(item.subtitle, locale)}</p>
+                      <h3>{toVisibleText(item.title, locale)}</h3>
+                      <p>{toVisibleText(item.text, locale)}</p>
                       <a
                         className="btn btn-ghost"
                         href={item.ctaHref}
@@ -246,8 +366,8 @@ export function LandingPage({ config }: LandingPageProps) {
         {config.technicalSpecs && config.technicalSpecs.length > 0 && (
           <section className="section container">
             <Reveal>
-              <p className="section-kicker">Especificaciones</p>
-              <h2>Ficha tecnica sintetica</h2>
+              <p className="section-kicker">{copy.specs}</p>
+              <h2>{copy.specsTitle}</h2>
             </Reveal>
             <Reveal delay={80}>
               <div className="card card-pad">
@@ -255,8 +375,8 @@ export function LandingPage({ config }: LandingPageProps) {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>Parametro</th>
-                        <th>Detalle</th>
+                        <th>{copy.specsParam}</th>
+                        <th>{copy.specsDetail}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -276,15 +396,15 @@ export function LandingPage({ config }: LandingPageProps) {
 
         <section className="section container">
           <Reveal>
-              <p className="section-kicker">Galería de referencia</p>
-              <h2>Bloques visuales para sustituir por contenido final</h2>
+              <p className="section-kicker">{copy.gallery}</p>
+              <h2>{copy.galleryTitle}</h2>
           </Reveal>
           <div className="grid grid-3">
             {config.gallery.map((item, index) => (
               <Reveal key={`${item.alt}-${index}`} delay={index * 70}>
                 <article className="card card-pad gallery-card">
                   <NeonPlaceholder
-                    label={`Frame ${index + 1}`}
+                    label={`${copy.frame} ${index + 1}`}
                     caption={item.image}
                     minHeight={230}
                     aspectRatio="4 / 3"
@@ -298,12 +418,9 @@ export function LandingPage({ config }: LandingPageProps) {
         <section className="section section-soft">
           <div className="container two-col">
             <Reveal>
-              <p className="section-kicker">Bloque técnico</p>
-              <h2>Mensajes para arquitectos y dirección de proyecto</h2>
-              <p className="lead-text">
-                Argumentos de durabilidad, normativa, trazabilidad y operación para soportar decisiones de
-                especificación.
-              </p>
+              <p className="section-kicker">{copy.technicalBlock}</p>
+              <h2>{copy.technicalTitle}</h2>
+              <p className="lead-text">{copy.technicalText}</p>
             </Reveal>
             <Reveal delay={80}>
               <div className="card card-pad">
@@ -329,10 +446,10 @@ export function LandingPage({ config }: LandingPageProps) {
             </Reveal>
             <Reveal delay={80}>
               <div className="card card-pad">
-                <p className="section-kicker">Universo complementario</p>
+                <p className="section-kicker">{copy.differentialBlock}</p>
                 <h2>{config.maderBalear.title}</h2>
                 <p className="lead-text" style={{ marginBottom: "1rem" }}>
-                  {toSpanishVisibleText(config.maderBalear.text)}
+                  {toVisibleText(config.maderBalear.text, locale)}
                 </p>
                 <a className="btn btn-primary" href="#contact">
                   {config.maderBalear.ctaLabel}
@@ -345,35 +462,18 @@ export function LandingPage({ config }: LandingPageProps) {
         <section id="contact" className="section section-dark">
           <div className="container two-col contact-wrap">
             <Reveal>
-              <p className="section-kicker section-kicker-light">Contacto</p>
-              <h2>Solicita evaluación técnica para tu proyecto</h2>
-              <p className="lead-text">
-                Cierre comercial directo con formulario y WhatsApp para acelerar respuesta a cliente final,
-                arquitectura y prescripción.
-              </p>
-              <div className="hero-actions" style={{ marginTop: "1rem" }}>
-                <a
-                  className="btn btn-light"
-                  href="#contact"
-                  onClick={() =>
-                    trackEvent("cta_click", config.slug, {
-                      section: "final",
-                      ctaLabel: "llamado final de contacto"
-                    })
-                  }
-                >
-                  Hablar con asesor técnico
-                </a>
-              </div>
+              <p className="section-kicker section-kicker-light">{copy.contactKicker}</p>
+              <h2>{copy.contactTitle}</h2>
+              <p className="lead-text">{copy.contactText}</p>
             </Reveal>
             <Reveal delay={100}>
-              <ContactForm originLanding={config.navName} />
+              <ContactForm originLanding={config.navName} locale={locale} />
             </Reveal>
           </div>
         </section>
       </main>
 
-      <FloatingWhatsApp sourcePage={config.slug} />
+      <FloatingWhatsApp sourcePage={config.slug} locale={locale} />
     </div>
   );
 }

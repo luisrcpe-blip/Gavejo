@@ -1,54 +1,56 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { NeonPlaceholder } from "@/components/ui/NeonPlaceholder";
 import { PublicHeader } from "@/components/ui/PublicHeader";
 import { Reveal } from "@/components/ui/Reveal";
-import { HomeGuidedTour } from "@/components/home/HomeGuidedTour";
 import { HomePrimaryRoutes } from "@/components/home/HomePrimaryRoutes";
+import { localizePath } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+const locale = "en" as const;
+
 const kpiItems = [
   {
-    kicker: "Madera termo tratada",
+    kicker: "Thermo treated wood",
     value: "200 C+",
-    description: "Proceso térmico para estabilidad y durabilidad sin biocidas."
+    description: "Thermal process for stability and durability without biocides."
   },
   {
-    kicker: "Trazabilidad",
+    kicker: "Traceability",
     value: "95%+ FSC",
-    description: "Volumen certificado para decisiones técnicas con respaldo."
+    description: "Certified volume for technical decisions with documented support."
   },
   {
-    kicker: "Durabilidad",
-    value: "15-25 años",
-    description: "Vida útil objetivo en exterior según especie y uso."
+    kicker: "Durability",
+    value: "15-25 years",
+    description: "Target service life outdoors depending on species and use."
   },
   {
-    kicker: "Captación",
-    value: "2 páginas",
-    description: "Embudo demo completo con contacto, WhatsApp y CRM."
+    kicker: "Lead capture",
+    value: "2 pages",
+    description: "Complete demo funnel with contact, WhatsApp and CRM."
   }
 ];
 
 const solutionCards = [
   {
-    title: "Maderas",
+    title: "Woods",
     href: "/materiales/termo-tratada",
-    caption: "Madera termotratada, quemada y recuperada para exterior, interior y proyectos con identidad.",
+    caption: "Thermo treated, burned and reclaimed wood for exterior, interior and identity-led projects.",
     image: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=900&q=80"
   },
   {
-    title: "Tableros",
+    title: "Boards",
     href: "/soluciones/fachadas",
-    caption: "Soluciones de tablero tecnico, trazabilidad y suministro para especificacion profesional.",
+    caption: "Technical board solutions, traceability and supply for professional specification.",
     image: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=900&q=80"
   },
   {
     title: "Contract",
     href: "/soluciones/fachadas",
-    caption: "Sistemas para hoteles, retail y proyectos profesionales con criterio tecnico y mantenimiento previsto.",
+    caption: "Systems for hotels, retail and professional projects with technical criteria and planned maintenance.",
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80"
   }
 ];
@@ -56,50 +58,48 @@ const solutionCards = [
 const ecosystemCards = [
   {
     title: "Prime Forest",
-    copy: "Origen forestal controlado para abastecimiento con criterio legal y técnico.",
-    placeholder: "Silvicultura y frondosas europeas"
+    copy: "Controlled forest origin for supply with legal and technical criteria.",
+    placeholder: "Forestry and European hardwoods"
   },
   {
     title: "Treecraft Plywood",
-    copy: "Tableros de ingeniería con control de calidad y marco CE.",
-    placeholder: "Contrachapado y trazabilidad"
+    copy: "Engineered panels with quality control and CE framework.",
+    placeholder: "Plywood and traceability"
   },
   {
     title: "Tantimber / LDCwood",
-    copy: "Catálogo de madera termotratada para envolventes, terrazas y proyectos profesionales.",
-    placeholder: "Revestimiento exterior premium"
+    copy: "Thermo treated wood catalog for envelopes, terraces and professional projects.",
+    placeholder: "Premium exterior cladding"
   }
 ];
 
-export default function HomePage() {
+export default function EnglishHomePage() {
   return (
     <>
       <PublicHeader />
       <main className="home-wrap">
-        <HomeGuidedTour />
         <section className="section home-hero-shell" id="inicio" data-tour-id="section-inicio">
           <div className="container home-hero-grid">
             <Reveal>
-              <span className="chip">Demo ejecutiva · Biomateriales avanzados</span>
-              <h1>Gavejo: plataforma comercial para fachadas y madera termotratada</h1>
+              <span className="chip">Executive demo · Advanced biomaterials</span>
+              <h1>Gavejo: commercial platform for facades and thermo treated wood</h1>
               <p className="lead-text home-lead">
-                Una página de inicio más potente para presentar la propuesta al director: dos páginas
-                especializadas, flujo de captación demostrable y panel de administración listo para
-                gestionar consultas en tiempo real.
+                A stronger home page for presenting the proposal to decision makers: two specialized pages,
+                a demonstrable lead-capture flow and an admin panel ready to manage inquiries in real time.
               </p>
-              <HomePrimaryRoutes />
+              <HomePrimaryRoutes locale={locale} />
               <div className="home-mini-points">
                 <div className="home-mini-point">
-                  <strong>Arquitectura</strong>
-                  <span>Lenguaje técnico y visual sobrio para prescriptores.</span>
+                  <strong>Architecture</strong>
+                  <span>Technical language and sober visuals for specifiers.</span>
                 </div>
                 <div className="home-mini-point">
-                  <strong>Conversión</strong>
-                  <span>Llamados a la acción, WhatsApp y formulario listos para demos comerciales.</span>
+                  <strong>Conversion</strong>
+                  <span>Calls to action, WhatsApp and forms ready for commercial demos.</span>
                 </div>
                 <div className="home-mini-point">
-                  <strong>Escalabilidad</strong>
-                  <span>Estructura repetible para nuevas páginas por solución.</span>
+                  <strong>Scalability</strong>
+                  <span>Repeatable structure for new solution pages.</span>
                 </div>
               </div>
             </Reveal>
@@ -107,23 +107,23 @@ export default function HomePage() {
             <div className="home-visual-stack">
               <Reveal delay={120}>
                 <NeonPlaceholder
-                  label="Portada corporativa"
-                  caption="Marcador verde para reemplazar por visual real"
+                  label="Corporate cover"
+                  caption="Green marker to replace with a real visual"
                   minHeight={360}
                   aspectRatio="16 / 10"
                 />
               </Reveal>
               <Reveal delay={200}>
                 <article className="home-highlight-card">
-                  <p className="section-kicker">Prueba funcional visible</p>
-                  <h3>Formulario -&gt; CRM -&gt; panel de control en minutos</h3>
+                  <p className="section-kicker">Visible functional proof</p>
+                  <h3>Form -&gt; CRM -&gt; control panel in minutes</h3>
                   <ul className="home-highlight-list">
-                    <li>La consulta se crea desde la página con origen correcto.</li>
-                    <li>Estado editable en CRM: nuevo / en gestión / cerrado.</li>
-                    <li>Contadores y actividad reflejados en el panel de administración.</li>
+                    <li>The inquiry is created from the page with the correct source.</li>
+                    <li>Editable CRM status: new / in progress / closed.</li>
+                    <li>Counters and activity are reflected in the admin panel.</li>
                   </ul>
                   <Link href="/admin?tab=crm" className="btn btn-secondary">
-                    Ver consultas en CRM
+                    View CRM inquiries
                   </Link>
                 </article>
               </Reveal>
@@ -147,11 +147,11 @@ export default function HomePage() {
           <div className="container">
             <Reveal>
               <div className="home-section-head" data-tour-id="section-soluciones-head">
-                <p className="section-kicker">Páginas protagonistas</p>
-                <h2>Dos páginas de captación listas para presentar y validar</h2>
+                <p className="section-kicker">Primary pages</p>
+                <h2>Two lead-capture pages ready to present and validate</h2>
                 <p className="lead-text">
-                  Cada página responde a una línea de negocio concreta y mantiene la misma arquitectura
-                  comercial para escalar nuevas soluciones sin perder consistencia.
+                  Each page responds to a specific business line and keeps the same commercial architecture
+                  so new solutions can scale without losing consistency.
                 </p>
               </div>
             </Reveal>
@@ -160,7 +160,11 @@ export default function HomePage() {
               {solutionCards.map((solution, idx) => (
                 <Reveal key={solution.title} delay={idx * 90}>
                   <article className="solution-card" style={{ backgroundImage: `url(${solution.image})` }}>
-                    <Link href={solution.href} className="solution-panel-link" aria-label={`Abrir ${solution.title}`}>
+                    <Link
+                      href={localizePath(solution.href, locale)}
+                      className="solution-panel-link"
+                      aria-label={`Open ${solution.title}`}
+                    >
                       <span className="solution-panel-title">{solution.title}</span>
                       <span className="solution-panel-description">{solution.caption}</span>
                     </Link>
@@ -175,8 +179,8 @@ export default function HomePage() {
           <div className="container">
             <Reveal>
               <div className="home-section-head">
-                <p className="section-kicker">Ecosistema técnico</p>
-                <h2>Base narrativa para arquitectura, proyectos profesionales y suministro especializado</h2>
+                <p className="section-kicker">Technical ecosystem</p>
+                <h2>Story foundation for architecture, professional projects and specialized supply</h2>
               </div>
             </Reveal>
             <div className="grid grid-3">
@@ -202,11 +206,11 @@ export default function HomePage() {
           <div className="container two-col">
             <Reveal>
               <div data-tour-id="section-contacto-head">
-                <p className="section-kicker">Ruta comercial</p>
-                <h2>De la visita web a la gestión comercial en un mismo entorno</h2>
+                <p className="section-kicker">Commercial route</p>
+                <h2>From website visit to commercial management in one environment</h2>
                 <p className="lead-text">
-                  El cliente final ve una experiencia limpia y el equipo comercial recibe información accionable
-                  sin depender de procesos manuales.
+                  The final client sees a clean experience and the commercial team receives actionable
+                  information without relying on manual processes.
                 </p>
               </div>
               <div className="home-workflow-panel">
@@ -214,39 +218,39 @@ export default function HomePage() {
                   <li className="workflow-step">
                     <span>1</span>
                     <div>
-                      <strong>Interés en la página</strong>
-                      <p>Llamado principal a la acción y bloque final orientados a contacto real.</p>
+                      <strong>Page interest</strong>
+                      <p>Main call to action and final block oriented to real contact.</p>
                     </div>
                   </li>
                   <li className="workflow-step">
                     <span>2</span>
                     <div>
-                      <strong>Formulario con consentimiento</strong>
-                      <p>Consulta registrada con origen de la página y datos de contacto.</p>
+                      <strong>Form with consent</strong>
+                      <p>Inquiry registered with page source and contact details.</p>
                     </div>
                   </li>
                   <li className="workflow-step">
                     <span>3</span>
                     <div>
-                      <strong>Seguimiento en CRM</strong>
-                      <p>Estado editable, notas y exportación CSV para la operativa comercial.</p>
+                      <strong>CRM follow-up</strong>
+                      <p>Editable status, notes and CSV export for commercial operations.</p>
                     </div>
                   </li>
                 </ol>
               </div>
               <div className="hero-actions">
-                <Link href="/contacto" className="btn btn-primary">
-                  Ir a Contacto
+                <Link href={localizePath("/contacto", locale)} className="btn btn-primary">
+                  Go to contact
                 </Link>
-                <Link href="/blog" className="btn btn-secondary">
-                  Ver blog técnico
+                <Link href={localizePath("/blog", locale)} className="btn btn-secondary">
+                  View technical blog
                 </Link>
               </div>
             </Reveal>
             <Reveal delay={100}>
               <NeonPlaceholder
-                label="Panel comercial"
-                caption="Sustituir por captura real del flujo CRM"
+                label="Commercial panel"
+                caption="Replace with a real CRM flow screenshot"
                 minHeight={320}
                 aspectRatio="16 / 10"
               />
@@ -258,18 +262,18 @@ export default function HomePage() {
           <div className="container">
             <Reveal>
               <div className="home-final-card">
-                <p className="chip chip-light">Estado de la demo</p>
-                <h2>Presentación lista para cliente: elegante, clara y accionable</h2>
+                <p className="chip chip-light">Demo status</p>
+                <h2>Client-ready presentation: elegant, clear and actionable</h2>
                 <p className="lead-text">
-                  La demo comunica visión comercial hoy y deja preparado el camino a la fase productiva
-                  con backend real, integraciones y operación continua.
+                  The demo communicates commercial vision now and prepares the path toward production with
+                  real backend, integrations and continuous operation.
                 </p>
                 <div className="hero-actions">
-                  <Link href="/soluciones/fachadas" className="btn btn-light">
-                    Iniciar recorrido
+                  <Link href={localizePath("/soluciones/fachadas", locale)} className="btn btn-light">
+                    Start walkthrough
                   </Link>
                   <Link href="/admin" className="btn btn-outline-light">
-                    Abrir panel de administración
+                    Open admin panel
                   </Link>
                 </div>
               </div>
@@ -277,7 +281,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <FloatingWhatsApp sourcePage="home" />
+        <FloatingWhatsApp sourcePage="home" locale={locale} />
       </main>
     </>
   );
